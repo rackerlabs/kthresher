@@ -1,0 +1,37 @@
+Source: kthresher
+Maintainer: Rackspace Debian Packaging Team <deb-pkg-maint@lists.rackspace.com>
+Uploaders:
+ Andreas "Jimmy" Gredler <andreas.gredler@rackspace.com>,
+ Brandon Tomlinson <brandon.tomlinson@rackspace.com>,
+ Tony Garcia <tony.garcia@rackspace.com>
+Section: admin
+Priority: optional
+Standards-Version: 3.9.8
+Homepage: https://github.com/rackerlabs/kthresher/
+Vcs-Git: https://github.com/rackerlabs/kthresher.git
+Vcs-Browser: https://github.com/rackerlabs/kthresher.git
+Build-Depends:
+ debhelper (>= 9),
+ dh-python,
+ python-all (>= 2.6.6-3),
+ python3-all,
+ python-setuptools
+X-Python-Version: >= 2.6
+
+Package: kthresher
+Architecture: all
+Section: admin
+Priority: optional
+Depends:
+ ${misc:Depends},
+ ${python:Depends},
+ python-apt
+Description: Purge Unused Kernels
+ Tool to remove unused kernels that were installed automatically
+ This tool removes those kernel packages marked as candidate for autoremoval.
+ Those packages are generally installed via Unattended upgrade or
+ meta-packages. By default the latest kernel and manual installations are
+ marked to Never Auto Remove.
+ .
+ thresher - A device that first separates the head of a stalk of grain from
+ the straw, and then further separates the kernel from the rest of the head.

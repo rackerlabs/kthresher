@@ -1,2 +1,5 @@
-#!/bin/bash
-/usr/bin/kthresher
+#!/bin/sh
+# Regular cron job for the mykthresher package
+#
+
+[ -x /usr/sbin/kthresher ] && /usr/sbin/kthresher
