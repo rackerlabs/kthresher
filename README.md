@@ -1,6 +1,10 @@
 kthresher
 =========
 
+[![](https://img.shields.io/pypi/v/kthresher.svg)](https://pypi.python.org/pypi/kthresher/)
+[![](https://img.shields.io/pypi/dm/kthresher.svg)](https://pypi.python.org/pypi/kthresher/)
+[![](https://img.shields.io/pypi/pyversions/kthresher.svg)](https://pypi.python.org/pypi/kthresher/)
+
 Tool to remove unused kernels that were installed automatically in Debian/Ubuntu
 
 This tool removes those kernel packages marked as candidate for autoremoval. Those packages are generally installed via Unattended upgrade or meta-packages. By default the latest kernel and manual installations are marked to Never Auto Remove.
@@ -12,6 +16,7 @@ Supported Operating Systems
 
 * Debian (Tested on Version(s) 8)
 * Ubuntu (Tested on Version(s) 14.04, 15.10)
+
 
 Usage
 -----
@@ -47,7 +52,7 @@ Examples
 Bugs
 ----
 
-Submit Bug reports, feature requests via [Issues][1]
+Submit Bug reports, feature requests via [issues][1].
 
 
-[1] https://github.com/rackerlabs/kthresher/issues
+[1]: https://github.com/rackerlabs/kthresher/issues
