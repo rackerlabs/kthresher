@@ -17,7 +17,7 @@ import setuptools
 
 setuptools.setup(
     name='kthresher',
-    version='0.2.2',
+    version='0.2.3',
     description=('Tool to purge unused kernels.'),
     author='Tony Garcia',
     author_email='tony DOT garcia AT rackspace DOT com',
@@ -28,8 +28,8 @@ setuptools.setup(
     },
     packages=['kthresher'],
     url='https://github.com/rackerlabs/kthresher',
-    download_url='https://github.com/rackerlabs/kthresher/tarball/0.2.1',
-    zip_safe=False
+    download_url='https://github.com/rackerlabs/kthresher/tarball/0.2.3',
+    zip_safe=False,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Programming Language :: Python',

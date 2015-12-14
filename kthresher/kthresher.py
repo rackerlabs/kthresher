@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from __future__ import print_function
 
 # Copyright 2015 Tony Garcia
@@ -42,7 +43,7 @@ except ImportError:
     sys.exit(1)
 
 
-__version__ = "0.2.1"
+__version__ = "0.2.3"
 
 
 def kthreshing(purge=None, force=None):

@@ -4,6 +4,7 @@ kthresher
 [![](https://img.shields.io/pypi/v/kthresher.svg)](https://pypi.python.org/pypi/kthresher/)
 [![](https://img.shields.io/pypi/dm/kthresher.svg)](https://pypi.python.org/pypi/kthresher/)
 [![](https://img.shields.io/pypi/pyversions/kthresher.svg)](https://pypi.python.org/pypi/kthresher/)
+[![](https://img.shields.io/pypi/l/kthresher.svg)](https://pypi.python.org/pypi/kthresher/)
 
 Tool to remove unused kernels that were installed automatically in Debian/Ubuntu
 
@@ -17,6 +18,26 @@ Supported Operating Systems
 * Debian (Tested on Version(s) 8)
 * Ubuntu (Tested on Version(s) 14.04, 15.10)
 
+Installation
+-----
+### script
+
+    wget -O kthresher https://raw.githubusercontent.com/rackerlabs/kthresher/master/kthresher/kthresher.py
+    chmod u+x kthresher
+
+
+### pip
+
+    pip install kthresher
+
+or
+
+    pip install git+https://github.com/rackerlabs/kthresher.git
+
+### Github
+
+    git clone https://https://github.com/rackerlabs/kthresher.git
+    python kthresher/setup.py install
 
 Usage
 -----
