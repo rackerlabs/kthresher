@@ -34,7 +34,7 @@ try:
     import apt
 except ImportError:
     distro = dist()[0]
-    if (dist == 'debian' or dist == 'Ubuntu'):
+    if (distro == 'debian' or distro == 'Ubuntu'):
         print('Error, python apt library was not found\n'
               'python-apt and/or python3-apt packages provide it.',
               file=sys.stderr)
