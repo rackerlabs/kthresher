@@ -1,11 +1,6 @@
 kthresher
 =========
 
-[![](https://img.shields.io/pypi/v/kthresher.svg)](https://pypi.python.org/pypi/kthresher/)
-[![](https://img.shields.io/pypi/dm/kthresher.svg)](https://pypi.python.org/pypi/kthresher/)
-[![](https://img.shields.io/pypi/pyversions/kthresher.svg)](https://pypi.python.org/pypi/kthresher/)
-[![](https://img.shields.io/pypi/l/kthresher.svg)](https://pypi.python.org/pypi/kthresher/)
-
 Tool to remove unused kernels that were installed automatically in Debian/Ubuntu.
 
 This tool removes those kernel packages marked as candidate for autoremoval. Those packages are generally installed via Unattended upgrade or meta-packages. By default the latest kernel and manual installations are marked to Never Auto Remove.
@@ -13,34 +8,58 @@ This tool removes those kernel packages marked as candidate for autoremoval. Tho
 *thresher - A device that first separates the head of a stalk of grain from the straw, and then further separates the kernel from the rest of the head.*
 
 
+-----
+
+|version| |downloads| |versions| |license|
+
+-----
+
+.. contents:: Table of Contents
+        :local:
+        :depth: 1
+        :backlinks: none
+
+-----
+
 Supported Operating Systems
 ---------------------------
 
 * Debian (Tested on Version(s))
-  * [8](https://www.debian.org/releases/jessie/)
+    * `8 <https://www.debian.org/releases/jessie/>`__
 * Ubuntu (Tested on Version(s))
-  * [14.04](http://releases.ubuntu.com/trusty/)
-  * [15.10](http://releases.ubuntu.com/trusty/)
-  * [16.04(development branch/Beta 2)](http://releases.ubuntu.com/xenial/)
+    * `14.04 <http://releases.ubuntu.com/trusty/>`__
+    * `15.10 <http://releases.ubuntu.com/wily/>`__
+    * `16.04(development branch/Beta 2) <http://releases.ubuntu.com/xenial/>`__
 
 
 Installation
------
-### script
+------------
+script
+~~~~~~
+
+.. code-block:: bash
 
     wget -O kthresher https://raw.githubusercontent.com/rackerlabs/kthresher/master/kthresher/kthresher.py
     chmod u+x kthresher
 
 
-### pip
+pip
+~~~
+
+.. code-block:: bash
 
     pip install kthresher
 
 or
 
+.. code-block:: bash
+
     pip install git+https://github.com/rackerlabs/kthresher.git
 
-### Github
+Github
+~~~~~~
+
+.. code-block:: bash
 
     git clone https://https://github.com/rackerlabs/kthresher.git
     python kthresher/setup.py install
@@ -48,6 +67,8 @@ or
 
 Usage
 -----
+
+.. code-block::
 
     $ kthresher -h
     usage: kthresher [-h] [-d] [-n [N]] [-p] [-s] [-v] [-V]
@@ -68,8 +89,10 @@ Usage
 Examples
 --------
 
-    List which kernel images and its dependencies would remove(dry run)
-    --------------------------------------------------------------------
+List which kernel images and its dependencies would remove(dry run)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. code-block::
+
     # kthresher -d
     INFO: ----- DRY RUN -----
     INFO: Running kernel is linux-image-3.13.0-83-generic v[3.13.0-83.127]
@@ -91,8 +114,11 @@ Examples
     INFO:   Purging packages from version: 3.16.0-33.44~14.04.1
     INFO:           Purging: linux-image-3.16.0-33-generic
 
-    Show all kernel packages available for autoremoval
-    --------------------------------------------------
+
+Show all kernel packages available for autoremoval
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. code-block::
+
     # kthresher -s
     List of kernel packages available for autoremoval:
                    Version Package
@@ -116,8 +142,11 @@ Examples
              3.13.0-79.123 linux-image-extra-3.13.0-79-generic
               3.13.0.83.89 linux-image-generic
 
-    Purge Unused Kernels, keep 4 kernels and be verbose
-    ---------------------------------------------------
+
+Purge Unused Kernels, keep 4 kernels and be verbose
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. code-block::
+
     # ./kthresher.py -p -n4 -v
     INFO: Running kernel is linux-image-3.13.0-83-generic v[3.13.0-83.127]
     INFO: Attempting to keep 4 kernel package(s)
@@ -174,14 +203,27 @@ Examples
 
 Known Issues
 ------------
-Python3 support is currently broken due to a known disutils.LooseVersion [issue][2].
+Python3 support is currently broken due to a known disutils.LooseVersion `issue <https://bugs.python.org/issue14894>`__.
 
 
 Bugs
 ----
 
-Submit Bug reports, feature requests via [issues][1].
+Submit Bug reports, feature requests via `issues <https://github.com/rackerlabs/kthresher/issues>`__.
 
 
-[1]: https://github.com/rackerlabs/kthresher/issues
-[2]: https://bugs.python.org/issue14894
+-----
+
+.. |version| image:: https://img.shields.io/pypi/v/kthresher.svg
+        :target: https://pypi.python.org/pypi/kthresher/
+        :alt: Latest Version
+.. |downloads| image:: https://img.shields.io/pypi/dm/kthresher.svg
+        :target: https://pypi.python.org/pypi/kthresher
+        :alt: Downloads
+.. |versions| image:: https://img.shields.io/pypi/pyversions/kthresher.svg
+        :target: https://pypi.python.org/pypi/kthresher/
+        :alt: Versions
+.. |license| image:: https://img.shields.io/pypi/l/kthresher.svg
+        :target: https://pypi.python.org/pypi/kthresher/
+        :alt: License
+
