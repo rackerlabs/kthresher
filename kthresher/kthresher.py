@@ -233,7 +233,7 @@ def main():
     conf_options = {}
     parser = argparse.ArgumentParser(description='Purge Unused Kernels.',
                                      prog='kthresher')
-    parser.add_argument('-c', '--config', type=str, metavar='PATH',
+    parser.add_argument('-c', '--config', type=str, metavar='FILE',
                         help='Config file, default is /etc/kthresher.conf')
     parser.add_argument('-d', '--dry-run', action='store_true',
                         help='List unused kernel images available to purge'
