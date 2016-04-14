@@ -15,9 +15,15 @@
 
 import setuptools
 
+def get_version():
+    with open('kthresher/kthresher.py') as f:
+        for line in f:
+            if line.startswith('__version__'):
+                return eval(line.split('=')[-1])
+
 setuptools.setup(
     name='kthresher',
-    version='1.0.1',
+    version=get_version(),
     description=('Purge Unused Kernels.'),
     long_description=('Tool to remove kernel image packages marked as '
                       'candidates for autoremoval.'),
@@ -25,13 +31,15 @@ setuptools.setup(
     author='Tony Garcia',
     author_email='tony DOT garcia AT rackspace DOT com',
     license='Apache License, Version 2.0',
+    include_package_data = True,
     entry_points={
         'console_scripts': [
             'kthresher=kthresher.kthresher:main'
         ]
     },
     packages=['kthresher'],
-    download_url='https://github.com/rackerlabs/kthresher/tarball/1.0.1',
+    download_url='https://github.com/rackerlabs/kthresher/tarball/{0}'
+                 .format(get_version()),
     zip_safe=False,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
