@@ -71,13 +71,13 @@ Usage
 .. code-block::
 
     $ kthresher -h
-    usage: kthresher [-h] [-c PATH] [-d] [-k [N]] [-p] [-s] [-v] [-V]
+    usage: kthresher [-h] [-c FILE] [-d] [-k [N]] [-p] [-s] [-v] [-V]
     
     Purge Unused Kernels.
     
     optional arguments:
       -h, --help            show this help message and exit
-      -c PATH, --config PATH
+      -c FILE, --config FILE
                             Config file, default is /etc/kthresher.conf
       -d, --dry-run         List unused kernel images available to purge(dry run).
                             Is always verbose.
