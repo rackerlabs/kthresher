@@ -71,14 +71,17 @@ Usage
 .. code-block::
 
     $ kthresher -h
-    usage: kthresher [-h] [-d] [-n [N]] [-p] [-s] [-v] [-V]
+    usage: kthresher [-h] [-c PATH] [-d] [-k [N]] [-p] [-s] [-v] [-V]
     
     Purge Unused Kernels.
     
     optional arguments:
       -h, --help            show this help message and exit
-      -d, --dry-run         List unused kernel images available to purge(dry run)
-      -n [N], --number [N]  Number of kernels to keep, default 1.
+      -c PATH, --config PATH
+                            Config file, default is /etc/kthresher.conf
+      -d, --dry-run         List unused kernel images available to purge(dry run).
+                            Is always verbose.
+      -k [N], --keep [N]    Number of kernels to keep, default 1.
       -p, --purge           Purge Unused Kernels.
       -s, --show-autoremoval
                             Show kernel packages available for autoremoval.
@@ -94,23 +97,21 @@ List which kernel images and its dependencies would remove(dry run)
 .. code-block::
 
     # kthresher -d
+    INFO: Attempting to read /etc/kthresher.conf.
+    INFO: Config file /etc/kthresher.conf is empty or does not exist, ignoring.
+    INFO: Options: {'purge': False, 'verbose': False, 'dry_run': True, 'keep': 1}
     INFO: ----- DRY RUN -----
     INFO: Running kernel is linux-image-3.13.0-83-generic v[3.13.0-83.127]
     INFO: Attempting to keep 1 kernel package(s)
-    INFO: Found 6 kernel image(s) installed and available for autoremoval
-    INFO: Pre-sorting: ['3.16.0-60.80~14.04.1', '3.13.0-63.103', '3.13.0-79.123', '3.16.0-33.44~14.04.1', '3.13.0-77.121', '3.13.0-24.47']
-    INFO: Post-sorting: ['3.13.0-24.47', '3.13.0-63.103', '3.13.0-77.121', '3.13.0-79.123', '3.16.0-33.44~14.04.1', '3.16.0-60.80~14.04.1']
-    INFO:   Purging packages from version: 3.13.0-24.47
-    INFO:           Purging: linux-image-3.13.0-24-generic
+    INFO: Found 4 kernel image(s) installed and available for autoremoval
+    INFO: Pre-sorting: ['3.16.0-60.80~14.04.1', '3.13.0-77.121', '3.13.0-63.103', '3.16.0-33.44~14.04.1']
+    INFO: Post-sorting: ['3.13.0-63.103', '3.13.0-77.121', '3.16.0-33.44~14.04.1', '3.16.0-60.80~14.04.1']
     INFO:   Purging packages from version: 3.13.0-63.103
     INFO:           Purging: linux-image-extra-3.13.0-63-generic
     INFO:           Purging: linux-image-3.13.0-63-generic
     INFO:   Purging packages from version: 3.13.0-77.121
     INFO:           Purging: linux-image-3.13.0-77-generic
     INFO:           Purging: linux-image-extra-3.13.0-77-generic
-    INFO:   Purging packages from version: 3.13.0-79.123
-    INFO:           Purging: linux-image-3.13.0-79-generic
-    INFO:           Purging: linux-image-extra-3.13.0-79-generic
     INFO:   Purging packages from version: 3.16.0-33.44~14.04.1
     INFO:           Purging: linux-image-3.16.0-33-generic
 
@@ -131,33 +132,33 @@ Show all kernel packages available for autoremoval
              3.13.0-77.121 linux-headers-3.13.0-77-generic
              3.13.0-79.123 linux-headers-3.13.0-79
              3.13.0-79.123 linux-headers-3.13.0-79-generic
-              3.13.0-24.47 linux-image-3.13.0-24-generic
              3.13.0-63.103 linux-image-3.13.0-63-generic
              3.13.0-77.121 linux-image-3.13.0-77-generic
-             3.13.0-79.123 linux-image-3.13.0-79-generic
       3.16.0-33.44~14.04.1 linux-image-3.16.0-33-generic
       3.16.0-60.80~14.04.1 linux-image-3.16.0-60-generic
              3.13.0-63.103 linux-image-extra-3.13.0-63-generic
              3.13.0-77.121 linux-image-extra-3.13.0-77-generic
-             3.13.0-79.123 linux-image-extra-3.13.0-79-generic
               3.13.0.83.89 linux-image-generic
 
 
-Purge Unused Kernels, keep 4 kernels and be verbose
+Purge Unused Kernels, keep 3 kernels and be verbose
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. code-block::
 
-    # ./kthresher.py -p -n4 -v
+    # kthresher -p -k3 v
+    INFO: Attempting to read /etc/kthresher.conf.
+    INFO: Config file /etc/kthresher.conf is empty or does not exist, ignoring.
+    INFO: Options: {'purge': True, 'verbose': True, 'dry_run': False, 'keep': 3}
     INFO: Running kernel is linux-image-3.13.0-83-generic v[3.13.0-83.127]
-    INFO: Attempting to keep 4 kernel package(s)
-    INFO: Found 5 kernel image(s) installed and available for autoremoval
-    INFO: Pre-sorting: ['3.16.0-60.80~14.04.1', '3.13.0-79.123', '3.16.0-33.44~14.04.1', '3.13.0-63.103', '3.13.0-77.121']
-    INFO: Post-sorting: ['3.13.0-63.103', '3.13.0-77.121', '3.13.0-79.123', '3.16.0-33.44~14.04.1', '3.16.0-60.80~14.04.1']
+    INFO: Attempting to keep 3 kernel package(s)
+    INFO: Found 4 kernel image(s) installed and available for autoremoval
+    INFO: Pre-sorting: ['3.16.0-60.80~14.04.1', '3.13.0-77.121', '3.13.0-63.103', '3.16.0-33.44~14.04.1']
+    INFO: Post-sorting: ['3.13.0-63.103', '3.13.0-77.121', '3.16.0-33.44~14.04.1', '3.16.0-60.80~14.04.1']
     INFO:   Purging packages from version: 3.13.0-63.103
     INFO:           Purging: linux-image-extra-3.13.0-63-generic
     INFO:           Purging: linux-image-3.13.0-63-generic
     Fetched 0 B in 0s (0 B/s)
-    (Reading database ... 174333 files and directories currently installed.)
+    (Reading database ... 169514 files and directories currently installed.)
     Removing linux-image-extra-3.13.0-63-generic (3.13.0-63.103) ...
     run-parts: executing /etc/kernel/postinst.d/apt-auto-removal 3.13.0-63-generic /boot/vmlinuz-3.13.0-63-generic
     run-parts: executing /etc/kernel/postinst.d/initramfs-tools 3.13.0-63-generic /boot/vmlinuz-3.13.0-63-generic
@@ -170,8 +171,6 @@ Purge Unused Kernels, keep 4 kernels and be verbose
     Found initrd image: /boot/initrd.img-3.16.0-33-generic
     Found linux image: /boot/vmlinuz-3.13.0-83-generic
     Found initrd image: /boot/initrd.img-3.13.0-83-generic
-    Found linux image: /boot/vmlinuz-3.13.0-79-generic
-    Found initrd image: /boot/initrd.img-3.13.0-79-generic
     Found linux image: /boot/vmlinuz-3.13.0-77-generic
     Found initrd image: /boot/initrd.img-3.13.0-77-generic
     Found linux image: /boot/vmlinuz-3.13.0-63-generic
@@ -190,8 +189,6 @@ Purge Unused Kernels, keep 4 kernels and be verbose
     Found initrd image: /boot/initrd.img-3.16.0-33-generic
     Found linux image: /boot/vmlinuz-3.13.0-83-generic
     Found initrd image: /boot/initrd.img-3.13.0-83-generic
-    Found linux image: /boot/vmlinuz-3.13.0-79-generic
-    Found initrd image: /boot/initrd.img-3.13.0-79-generic
     Found linux image: /boot/vmlinuz-3.13.0-77-generic
     Found initrd image: /boot/initrd.img-3.13.0-77-generic
     done
@@ -199,6 +196,38 @@ Purge Unused Kernels, keep 4 kernels and be verbose
     Examining /etc/kernel/postrm.d .
     run-parts: executing /etc/kernel/postrm.d/initramfs-tools 3.13.0-63-generic /boot/vmlinuz-3.13.0-63-generic
     run-parts: executing /etc/kernel/postrm.d/zz-update-grub 3.13.0-63-generic /boot/vmlinuz-3.13.0-63-generic
+
+
+Verbose run using a non-default config file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    # kthresher -c myconf.conf
+    INFO: Attempting to read myconf.conf.
+    INFO: Options found: ['keep', 'dry_run'].
+    INFO: Valid setting found "keep"
+    INFO:   keep = 1
+    INFO: Valid setting found "dry_run"
+    INFO:   dry_run = True
+    INFO: Options: {'purge': False, 'verbose': True, 'dry_run': True, 'keep': 1}
+    INFO: ----- DRY RUN -----
+    INFO: Running kernel is linux-image-3.13.0-83-generic v[3.13.0-83.127]
+    INFO: Attempting to keep 1 kernel package(s)
+    INFO: Found 2 kernel image(s) installed and available for autoremoval
+    INFO: Pre-sorting: ['3.16.0-60.80~14.04.1', '3.16.0-33.44~14.04.1']
+    INFO: Post-sorting: ['3.16.0-33.44~14.04.1', '3.16.0-60.80~14.04.1']
+    INFO:   Purging packages from version: 3.16.0-33.44~14.04.1
+    INFO:           Purging: linux-image-3.16.0-33-generic
+
+
+Content of myconf.conf is:
+.. code-block::
+
+    [main]
+    keep    = 1
+    dry_run = yes
+    #purge = yes
 
 
 Known Issues

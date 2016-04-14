@@ -35,23 +35,91 @@ import re
 import sys
 import logging
 import argparse
+import ConfigParser
 from platform import uname, dist
 from distutils.version import LooseVersion
 
 try:
     import apt
 except ImportError:
-    distro = dist()[0]
-    if (distro == 'debian' or distro == 'Ubuntu'):
+    DISTRO = dist()[0]
+    if DISTRO == 'debian' or DISTRO == 'Ubuntu':
         print('Error, python apt library was not found\n'
               'python-apt and/or python3-apt packages provide it.',
               file=sys.stderr)
     else:
-        print('{0} distro not supported'.format(distro), file=sys.stderr)
+        print('{0} distro not supported'.format(DISTRO), file=sys.stderr)
     sys.exit(1)
 
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
+
+
+def get_configs(conf_file, section):
+    '''Obtains the configs from a file.
+    Config file format: INI
+    Valid sections: main
+    Valid options: dry_run, keep, purge, verbose
+    Example:
+    [main]
+    keep=[0-9]
+    dry_run=(yes|on|true|no|off|false)
+    purge=(yes|on|true|no|off|false)
+    verbose=(yes|on|true|no|off|false)
+    '''
+    valid_configs = {
+        'dry_run': 'boolean',
+        'keep': 'int',
+        'purge': 'boolean',
+        'verbose': 'boolean',
+    }
+    configs = {}
+    def_conf = ConfigParser.SafeConfigParser()
+    logging.info('Attempting to read {0}.'.format(conf_file))
+    try:
+        def_conf.read(conf_file)
+    except ConfigParser.ParsingError:
+        logging.error('Error, File contains parsing errors: {0}'
+                      .format(conf_file))
+        sys.exit(1)
+    if not def_conf.read(conf_file):
+        logging.info('Config file {0} is empty or does not exist, ignoring.'
+                     .format(conf_file))
+        return configs
+    if not def_conf.has_section(section):
+        logging.info('Unable to find section [{0}].'.format(section))
+        return configs
+    if len(def_conf.options(section)) < 1:
+        logging.info('No options found in section [{0}].'
+                     .format(section))
+        return configs
+    logging.info('Options found: {0}.'.format(def_conf.options(section)))
+    for option in def_conf.options(section):
+        if not option in valid_configs.keys():
+            logging.info('Invalid setting "{0}", ignoring'.format(option))
+        else:
+            logging.info('Valid setting found "{0}"'.format(option))
+            if valid_configs[option] == 'int':
+                try:
+                    configs[option] = def_conf.getint(section, option)
+                except:
+                    ConfigParser.NoOptionError
+                    logging.error('Error, unable to get value from "{0}".'
+                                  .format(option))
+                    sys.exit(1)
+                if option == 'keep':
+                    if configs[option] > 9:
+                        logging.error('Error, "keep" should be between 0-9.')
+                        sys.exit(1)
+            elif valid_configs[option] == 'boolean':
+                try:
+                    configs[option] = def_conf.getboolean(section, option)
+                except ConfigParser.NoOptionError:
+                    logging.error('Error, unable to get value from "{0}".'
+                                  .format(option))
+                    sys.exit(1)
+            logging.info('\t{0} = {1}'.format(option, configs[option]))
+    return configs
 
 
 def show_autoremovable_pkgs():
@@ -149,14 +217,30 @@ def kthreshing(purge=None, keep=1):
 def main():
     '''The main function.
     '''
+    defaults = {
+        'config': {
+            'file': '/etc/kthresher.conf',
+            'section': 'main',
+        },
+        'options': {
+            'dry_run': False,
+            'keep': 1,
+            'purge': False,
+            'verbose': False,
+        }
+    }
+    options = defaults['options'].copy()
+    conf_options = {}
     parser = argparse.ArgumentParser(description='Purge Unused Kernels.',
                                      prog='kthresher')
+    parser.add_argument('-c', '--config', type=str, metavar='PATH',
+                        help='Config file, default is /etc/kthresher.conf')
     parser.add_argument('-d', '--dry-run', action='store_true',
                         help='List unused kernel images available to purge'
-                        '(dry run)')
-    parser.add_argument('-n', '--number', nargs='?', type=int, default=1,
-                        help='Number of kernels to keep, default 1.', const=0,
-                        metavar='N', choices=range(0, 10))
+                        '(dry run). Is always verbose.')
+    parser.add_argument('-k', '--keep', nargs='?', type=int, const=0,
+                        metavar='N', choices=range(0, 10),
+                        help='Number of kernels to keep, default 1.')
     parser.add_argument('-p', '--purge', help='Purge Unused Kernels.',
                         action='store_true')
     parser.add_argument('-s', '--show-autoremoval', action='store_true',
@@ -168,26 +252,53 @@ def main():
                         help='Print version.')
     args = parser.parse_args()
 
-    if args.show_autoremoval:
-        show_autoremovable_pkgs()
-        sys.exit(0)
-    if args.dry_run or args.verbose:
+    # Logging
+    if args.verbose or args.dry_run:
         log_level = logging.INFO
     else:
         log_level = logging.ERROR
     logging.basicConfig(format='%(levelname)s: %(message)s',
                         level=log_level)
+    # Read config files
+    if args.config:
+        conf_options = get_configs(args.config, defaults['config']['section'])
+    else:
+        conf_options = get_configs(defaults['config']['file'],
+                                   defaults['config']['section'])
+    # Overriding options as follows:
+    # defaults -> default config file or custom config file -> cli arguments
+    # First overriding default configs from a file if available:
+    if conf_options:
+        options.update(conf_options)
+    # Override the verbosity if set through configuration
+    if options['verbose']:
+        logging.getLogger().setLevel(logging.INFO)
+    # Now overriding the result options with cli arguments
     if args.dry_run:
-        logging.info('----- DRY RUN -----')
-        kthreshing(purge=False, keep=args.number)
-        sys.exit(0)
+        options['dry_run'] = args.dry_run
+    if args.keep:
+        options['keep'] = args.keep
     if args.purge:
-        kthreshing(purge=True, keep=args.number)
+        options['purge'] = args.purge
+    if args.verbose:
+        options['verbose'] = args.verbose
+    logging.info('Options: {0}'.format(options))
+    # Show auto-removable, this is only available via explicit argument
+    if args.show_autoremoval:
+        show_autoremovable_pkgs()
+        sys.exit(0)
+    if options['dry_run']:
+        logging.info('----- DRY RUN -----')
+        kthreshing(purge=False, keep=options['keep'])
+        sys.exit(0)
+    if options['purge']:
+        kthreshing(purge=True, keep=options['keep'])
         sys.exit(0)
     else:
         print('Error, no argument used.', file=sys.stderr)
         parser.print_help()
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
