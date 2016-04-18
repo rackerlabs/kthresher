@@ -52,7 +52,7 @@ except ImportError:
     sys.exit(1)
 
 
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 
 def get_configs(conf_file, section):
@@ -160,8 +160,8 @@ def kthreshing(purge=None, headers=None, keep=1):
     '''
     kernels = {}
     ver_max_len = 0
-    kernel_image_regex = '^linux-image.*-generic$'
-    kernel_header_regex = '^linux-header.*(-generic)?$'
+    kernel_image_regex = '^linux-image.*(-generic|-virtual)$'
+    kernel_header_regex = '^linux-header.*(-generic|-virtual)?$'
     try:
         apt_cache = apt.Cache()
     except:

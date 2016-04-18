@@ -27,6 +27,7 @@ Supported Operating Systems
 * Debian (Tested on Version(s))
     * `8 <https://www.debian.org/releases/jessie/>`__
 * Ubuntu (Tested on Version(s))
+    * `12.04 <http://releases.ubuntu.com/precise/`__
     * `14.04 <http://releases.ubuntu.com/trusty/>`__
     * `15.10 <http://releases.ubuntu.com/wily/>`__
     * `16.04(development branch/Beta 2) <http://releases.ubuntu.com/xenial/>`__
