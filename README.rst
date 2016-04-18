@@ -42,7 +42,6 @@ script
     wget -O kthresher https://raw.githubusercontent.com/rackerlabs/kthresher/master/kthresher/kthresher.py
     chmod u+x kthresher
 
-
 pip
 ~~~
 
@@ -71,7 +70,7 @@ Usage
 .. code-block::
 
     $ kthresher -h
-    usage: kthresher [-h] [-c FILE] [-d] [-k [N]] [-p] [-s] [-v] [-V]
+    usage: kthresher [-h] [-c FILE] [-d] [-H] [-k [N]] [-p] [-s] [-v] [-V]
     
     Purge Unused Kernels.
     
@@ -81,6 +80,7 @@ Usage
                             Config file, default is /etc/kthresher.conf
       -d, --dry-run         List unused kernel images available to purge(dry run).
                             Is always verbose.
+      -H, --headers         Include the search for kernel headers.
       -k [N], --keep [N]    Number of kernels to keep, default 1.
       -p, --purge           Purge Unused Kernels.
       -s, --show-autoremoval
@@ -220,7 +220,6 @@ Verbose run using a non-default config file
     INFO:   Purging packages from version: 3.16.0-33.44~14.04.1
     INFO:           Purging: linux-image-3.16.0-33-generic
 
-
 Content of myconf.conf is:
 .. code-block::
 
@@ -228,6 +227,39 @@ Content of myconf.conf is:
     keep    = 1
     dry_run = yes
     #purge = yes
+
+
+Dry run including headers
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block::
+
+    # kthresher -v -d -H
+    INFO: Attempting to read /etc/kthresher.conf.
+    INFO: Options found: ['keep', 'dry_run', 'purge', 'verbose'].
+    INFO: Valid setting found "keep"
+    INFO:   keep = 2
+    INFO: Valid setting found "dry_run"
+    INFO:   dry_run = False
+    INFO: Valid setting found "purge"
+    INFO:   purge = True
+    INFO: Valid setting found "verbose"
+    INFO:   verbose = True
+    INFO: Options: {'verbose': True, 'dry_run': True, 'keep': 2, 'purge': True, 'headers': True}
+    INFO: ----- DRY RUN -----
+    INFO: Running kernel is linux-image-3.13.0-83-generic v[3.13.0-83.127]
+    INFO: Attempting to keep 2 kernel package(s)
+    INFO: Found 4 kernel image(s) installed and available for autoremoval
+    INFO: Pre-sorting: ['3.16.0-60.80~14.04.1', '3.16.0-33.44~14.04.1', '3.13.0-85.129', '3.13.0-79.123']
+    INFO: Post-sorting: ['3.13.0-79.123', '3.13.0-85.129', '3.16.0-33.44~14.04.1', '3.16.0-60.80~14.04.1']
+    INFO:   Purging packages from version: 3.13.0-79.123
+    INFO:           Purging: linux-image-3.13.0-79-generic
+    INFO:           Purging: linux-headers-3.13.0-79-generic
+    INFO:           Purging: linux-headers-3.13.0-79
+    INFO:   Purging packages from version: 3.13.0-85.129
+    INFO:           Purging: linux-image-3.13.0-85-generic
+    INFO:           Purging: linux-headers-3.13.0-85
+    INFO:           Purging: linux-headers-3.13.0-85-generic
 
 
 Known Issues
