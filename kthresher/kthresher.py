@@ -188,7 +188,7 @@ def kthreshing(purge=None, headers=None, keep=1):
                (pkg.is_installed and pkg.is_auto_removable) and
                re.match(kernel_header_regex, pkg_name)
                ):
-                if kernels in pkg.installed.version:
+                if pkg.installed.version in kernels.keys():
                     kernels[pkg.installed.version].append(pkg.name)
     if kernels:
         logging.info('Attempting to keep {0} kernel package(s)'.format(keep))
