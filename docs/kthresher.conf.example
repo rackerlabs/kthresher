@@ -1,11 +1,13 @@
 [main]
-keep    = 1
 dry_run = yes
+headers = yes
+keep    = 1
 #purge   = no
 #verbose = yes
 
-# keep - Number of kernel images to keep (0-9), default is 1 if none defined
 # dry_run - [ yes | on | true | no | off | false ] Don't commit changes
+# headers - [ yes | on | true | no | off | false ] Include or not the headers.
+# keep - Number of kernel images to keep (0-9), default is 1 if none defined
 # purge - [ yes | on | true | no | off | false ] Commit changes
 # verbose - [ yes | on | true | no | off | false ] Be verbose
 # NOTE: dry_run has preference over purge, even if both are set dry_run wins

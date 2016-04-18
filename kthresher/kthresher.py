@@ -52,23 +52,25 @@ except ImportError:
     sys.exit(1)
 
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 
 def get_configs(conf_file, section):
     '''Obtains the configs from a file.
     Config file format: INI
     Valid sections: main
-    Valid options: dry_run, keep, purge, verbose
+    Valid options: dry_run, headers, keep, purge, verbose
     Example:
     [main]
-    keep=[0-9]
     dry_run=(yes|on|true|no|off|false)
+    headers=(yes|on|true|no|off|false)
+    keep=[0-9]
     purge=(yes|on|true|no|off|false)
     verbose=(yes|on|true|no|off|false)
     '''
     valid_configs = {
         'dry_run': 'boolean',
+        'headers': 'boolean',
         'keep': 'int',
         'purge': 'boolean',
         'verbose': 'boolean',
@@ -152,12 +154,14 @@ def show_autoremovable_pkgs():
         print('No kernel packages available for autoremoval.')
 
 
-def kthreshing(purge=None, keep=1):
+def kthreshing(purge=None, headers=None, keep=1):
     '''Purge or list the unused kernels.
     By default keeps 1, besides the running kernel.
     '''
     kernels = {}
     ver_max_len = 0
+    kernel_image_regex = '^linux-image.*-generic$'
+    kernel_header_regex = '^linux-header.*(-generic)?$'
     try:
         apt_cache = apt.Cache()
     except:
@@ -172,11 +176,20 @@ def kthreshing(purge=None, keep=1):
         if (
            (pkg.is_installed and pkg.is_auto_removable) and
            (pkg.section == 'kernel' and
-            re.match("^linux-image-.*-generic$", pkg_name))
+            re.match(kernel_image_regex, pkg_name))
            ):
             if ver_max_len < len(pkg.installed.version):
                 ver_max_len = len(pkg.installed.version)
             kernels.setdefault(pkg.installed.version, []).append(pkg.name)
+    if headers:
+        for pkg_name in apt_cache.keys():
+            pkg = apt_cache[pkg_name]
+            if (
+               (pkg.is_installed and pkg.is_auto_removable) and
+               re.match(kernel_header_regex, pkg_name)
+               ):
+                if kernels in pkg.installed.version:
+                    kernels[pkg.installed.version].append(pkg.name)
     if kernels:
         logging.info('Attempting to keep {0} kernel package(s)'.format(keep))
         kernel_versions = list(kernels.copy().keys())
@@ -224,6 +237,7 @@ def main():
         },
         'options': {
             'dry_run': False,
+            'headers': False,
             'keep': 1,
             'purge': False,
             'verbose': False,
@@ -238,6 +252,8 @@ def main():
     parser.add_argument('-d', '--dry-run', action='store_true',
                         help='List unused kernel images available to purge'
                         '(dry run). Is always verbose.')
+    parser.add_argument('-H', '--headers', action='store_true',
+                        help='Include the search for kernel headers.')
     parser.add_argument('-k', '--keep', nargs='?', type=int, const=0,
                         metavar='N', choices=range(0, 10),
                         help='Number of kernels to keep, default 1.')
@@ -276,6 +292,8 @@ def main():
     # Now overriding the result options with cli arguments
     if args.dry_run:
         options['dry_run'] = args.dry_run
+    if args.headers:
+        options['headers'] = args.headers
     if args.keep:
         options['keep'] = args.keep
     if args.purge:
@@ -289,10 +307,18 @@ def main():
         sys.exit(0)
     if options['dry_run']:
         logging.info('----- DRY RUN -----')
-        kthreshing(purge=False, keep=options['keep'])
+        kthreshing(
+            purge=False,
+            headers=options['headers'],
+            keep=options['keep']
+        )
         sys.exit(0)
     if options['purge']:
-        kthreshing(purge=True, keep=options['keep'])
+        kthreshing(
+            purge=True,
+            headers=options['headers'],
+            keep=options['keep']
+        )
         sys.exit(0)
     else:
         print('Error, no argument used.', file=sys.stderr)
