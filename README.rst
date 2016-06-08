@@ -62,7 +62,7 @@ Github
 .. code-block:: bash
 
     git clone https://https://github.com/rackerlabs/kthresher.git
-    python kthresher/setup.py install
+    cd kthresher && python setup.py install
 
 
 Usage
