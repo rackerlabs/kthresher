@@ -1,0 +1,57 @@
+.TH kthresher 8 "June 2016" "kthresher v1.2.2"
+.SH "NAME"
+kthresher \- purge unused kernels
+.SH "SYNOPSIS"
+.B kthresher [\-h] [\-c 
+.I FILE
+.B ] [\-d] [\-H] [\-k 
+.I [N]
+.B ] [\-p] [\-s] [\-v] [\-V]
+.SH "DESCRIPTION"
+.I kthesher
+is a utility to remove kernel packages that are marked as a candidate for autoremoval, such as those installed via unattended\-upgrades or meta packages. 
+." Line Break
+.PP 
+By default the latest kernel and manual installations are marked to 'Never Auto Remove'.
+.SH "OPTIONS"
+.TP
+.B "\-h, \-\-help"
+show a help message and exits
+.TP
+.BI "\-c " "FILE" ", \-\-config " "FILE"
+Config file, default is 
+.I /etc/kthresher.conf
+.TP
+.B "\-d, \-\-dry\-run"
+List unused kernel images available to purge.
+This implies the 
+.B \-\-verbose 
+flag but performs no actions
+.TP
+.B "\-H, \-\-headers"
+Include the search for kernel headers
+.TP
+.BI "\-k " "N" ", \-\-keep " "N"
+Number of kernels to keep, default:  1
+.TP
+.B "\-p, \-\-purge"
+Purge unused kernels
+.TP
+.B "\-s, \-\-show\-autoremoval"
+Show kernel packages available for autoremoval
+.TP
+.B "\-v, \-\-verbose"
+Be verbose
+.TP
+.B "\-V, \-\-version"
+Print version
+.SH "REPORTING BUGS"
+Bugs and issues to be submitted via github <https://github.com/rackerlabs/kthresher/issues>.
+.SH "AUTHOR"
+Written by Tony Garcia <tony dot garcia at rackspace dot com>.
+.SH "SEE ALSO"
+Additional documentation to be found via github <https://github.com/rackerlabs/kthresher/blob/master/README.rst>.
+.SH "LICENSE"
+This software is Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at <http://www.apache.org/licenses/LICENSE\-2.0>.
+.PP
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. 
