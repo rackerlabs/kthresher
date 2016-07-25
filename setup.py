@@ -16,7 +16,7 @@
 import setuptools
 
 def get_version():
-    with open('kthresher/kthresher.py') as f:
+    with open('kthresher.py') as f:
         for line in f:
             if line.startswith('__version__'):
                 return eval(line.split('=')[-1])
@@ -31,16 +31,14 @@ setuptools.setup(
     author='Tony Garcia',
     author_email='tony DOT garcia AT rackspace DOT com',
     license='Apache License, Version 2.0',
-    include_package_data = True,
     entry_points={
         'console_scripts': [
-            'kthresher=kthresher.kthresher:main'
+            'kthresher=kthresher:main'
         ]
     },
-    packages=['kthresher'],
+    py_modules=['kthresher'],
     download_url='https://github.com/rackerlabs/kthresher/tarball/{0}'
                  .format(get_version()),
-    zip_safe=False,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Programming Language :: Python',
