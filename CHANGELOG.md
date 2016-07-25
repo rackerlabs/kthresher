@@ -5,9 +5,11 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Man page.
 - Changelog.
+- Debian directory for .debs.
 
 ### Changed
 - Flatten directory structure for .deb.
+- Cron file to check if script is available prior execution.
 
 ## [1.2.2] - 2016-04-19
 ### Added
