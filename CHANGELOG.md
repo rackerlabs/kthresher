@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.2.5] - 2016-09-02
+### Added
+- Included requirement of python-pkg-resources for deb.
+
 ## [1.2.4] - 2016-09-02
 ### Added
 - Drone config.
