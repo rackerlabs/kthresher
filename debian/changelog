@@ -1,10 +1,11 @@
+kthresher (1.2.3) unstable; urgency=low
+
+  * Added man page, changelog, and debian directory for .debs.
+
+ -- Tony Garcia <tony.garcia@rackspace.com>  Mon, 25 Jul 2016 00:00:00 +0000
+
 kthresher (1.2.2) unstable; urgency=low
 
   * Initial Release.
 
  -- Andreas "Jimmy" Gredler <andreas.gredler@rackspace.com>  Wed, 20 Apr 2016 02:50:31 +0200
-
-  * source package(0.2.3-1) automatically created by stdeb 0.6.0+git
-
- -- Brandon Tomlinson <Brandon.Tomlinson@rackspace.com>  Wed, 16 Mar 2016 14:49:20 +0000
-
