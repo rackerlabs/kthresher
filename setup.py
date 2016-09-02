@@ -46,5 +46,8 @@ setuptools.setup(
         'Operating System :: POSIX :: Linux',
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 2.7',
+    ],
+    data_files=[('/etc', ['kthresher.conf']),
+                ('/usr/share/man/man8', ['kthresher.8'])
     ]
 )

@@ -1,5 +1,2 @@
 include LICENSE
 include README.rst
-include kthresher.8
-include kthresher.conf.example
-include kthresher.cron.daily
