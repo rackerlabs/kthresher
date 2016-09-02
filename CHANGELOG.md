@@ -1,6 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.2.4] - 2016-09-02
+### Added
+- Drone config.
+
+### Changed
+- Debian configs for proper building.
+
+### Fixed
+- Typos on man page.
+
 ## [1.2.3] - 2016-07-25
 ### Added
 - Man page.

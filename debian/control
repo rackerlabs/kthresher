@@ -6,7 +6,7 @@ Uploaders:
  Tony Garcia <tony.garcia@rackspace.com>
 Section: admin
 Priority: optional
-Standards-Version: 3.9.8
+Standards-Version: 3.9.7
 Homepage: https://github.com/rackerlabs/kthresher/
 Vcs-Git: https://github.com/rackerlabs/kthresher.git
 Vcs-Browser: https://github.com/rackerlabs/kthresher.git
