@@ -1,3 +1,9 @@
+kthresher (1.2.5) unstable; urgency=low
+
+  * Added python-pkg-resources as a requirement for the deb.
+
+ -- Tony Garcia <tony.garcia@rackspace.com>  Fri, 2 Sep 2016 20:00:00 +0000
+
 kthresher (1.2.4) unstable; urgency=low
 
   * Modified directory structure and debian config files.

@@ -25,7 +25,8 @@ Priority: optional
 Depends:
  ${misc:Depends},
  ${python:Depends},
- python-apt
+ python-apt,
+ python-pkg-resources
 Description: Purge Unused Kernels
  Tool to remove unused kernels that were installed automatically
  This tool removes those kernel packages marked as candidate for autoremoval.
