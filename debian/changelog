@@ -1,3 +1,10 @@
+kthresher (1.2.4) unstable; urgency=low
+
+  * Modified directory structure and debian config files.
+  * Build process is now added through drone.
+
+ -- Tony Garcia <tony.garcia@rackspace.com>  Fri, 2 Sep 2016 17:40:00 +0000
+
 kthresher (1.2.3) unstable; urgency=low
 
   * Added man page, changelog, and debian directory for .debs.
