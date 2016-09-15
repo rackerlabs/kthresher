@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2016-09-15
+### Removed
+- Debian dir and drone configs, will not live now with the code, @thebwt will maintain that now.
+
 ## [1.2.4] - 2016-09-02
 ### Added
 - Drone config.
