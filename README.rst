@@ -3,10 +3,11 @@ kthresher
 
 Tool to remove unused kernels that were installed automatically in Debian/Ubuntu.
 
-This tool removes those kernel packages marked as candidate for autoremoval. Those packages are generally installed via Unattended upgrade or meta-packages. By default the latest kernel and manual installations are marked to Never Auto Remove.
+This tool removes those kernel packages marked as candidate for autoremoval. Those packages are generally installed via Unattended upgrade or meta-packages.
+
+By default, on apt 1.0 and below, the booted kernel, the latest-installed kernel and the latest kernel are set to "NeverAutoRemove". Or, for apt 1.2 and above, the booted kernel, the latest-installed kernel, the latest kernel and the second-latest kernel are set to "NeverAutoRemove".
 
 *thresher - A device that first separates the head of a stalk of grain from the straw, and then further separates the kernel from the rest of the head.*
-
 
 -----
 
@@ -15,22 +16,54 @@ This tool removes those kernel packages marked as candidate for autoremoval. Tho
 -----
 
 .. contents:: Table of Contents
-        :local:
-        :depth: 1
-        :backlinks: none
+   :depth: 1
+   :backlinks: none
 
 -----
+
+How a package is marked for autoremoval?
+----------------------------------------
+
+Whenever a package is auto-installed and there is no other dependency for it, the package is marked as a candidate for autoremoval, there is an exception if the *APT* configuration does have the package marked as "NeverAutoRemove".
+
+
+How the kernel image is added into the "APT::NeverAutoRemove::" config?
+-----------------------------------------------------------------------
+
+When a kernel image is installed the *postinstall* script will issue the *run-parts* on */etc/kernel/postinst.d/* and */etc/kernel/postinst.d/${version}* if any exist.  The *run-parts* script will run each one of the scripts located in that directory, e.g.
+
+.. code-block:: bash
+
+    # ls -1 /etc/kernel/postinst.d/
+    apt-auto-removal
+    initramfs-tools
+    update-notifier
+    x-grub-legacy-ec2
+    zz-update-grub
+
+All the scripts found by *run-parts* are executed on post install of the kernel package and the output of apt-get install/upgrade/dist-upgrade will show them, e.g.
+
+.. code-block:: bash
+
+    run-parts: executing /etc/kernel/postinst.d/apt-auto-removal 3.13.0-96-generic /boot/vmlinuz-3.13.0-96-generic
+    run-parts: executing /etc/kernel/postinst.d/initramfs-tools 3.13.0-96-generic /boot/vmlinuz-3.13.0-96-generic
+    run-parts: executing /etc/kernel/postinst.d/update-notifier 3.13.0-96-generic /boot/vmlinuz-3.13.0-96-generic
+    run-parts: executing /etc/kernel/postinst.d/x-grub-legacy-ec2 3.13.0-96-generic /boot/vmlinuz-3.13.0-96-generic
+    run-parts: executing /etc/kernel/postinst.d/zz-update-grub 3.13.0-96-generic /boot/vmlinuz-3.13.0-96-generic
+
+The first script *"apt-auto-removal"* takes care of adding a configuration in /etc/apt/apt.conf.d/01autoremove-kernels this script generates that list based on the logic described above, it means that the NeverAutoRemove may have anything between two to three kernels listed.
 
 Supported Operating Systems
 ---------------------------
 
 * Debian (Tested on Version(s))
     * `8 <https://www.debian.org/releases/jessie/>`__
+    * `stretch <https://www.debian.org/releases/stretch/>`__
 * Ubuntu (Tested on Version(s))
     * `12.04 <http://releases.ubuntu.com/precise/>`__
     * `14.04 <http://releases.ubuntu.com/trusty/>`__
     * `15.10 <http://releases.ubuntu.com/wily/>`__
-    * `16.04(development branch/Beta 2) <http://releases.ubuntu.com/xenial/>`__
+    * `16.04 <http://releases.ubuntu.com/xenial/>`__
 
 
 Installation
@@ -261,6 +294,61 @@ Dry run including headers
     INFO:           Purging: linux-image-3.13.0-85-generic
     INFO:           Purging: linux-headers-3.13.0-85
     INFO:           Purging: linux-headers-3.13.0-85-generic
+
+
+Testing
+-------
+
+The below code can be used to install all the kernels and headers available of the form "linux-(image|headers)-[0-9].*-generic" at the end it should end up with two or three kernels in the NeverAutoRemove list, including the latest, the prior to latest and the running kernel.
+
+.. code-block:: python
+
+    #!/usr/bin/env python
+    '''Installs available linux-image-* and linux-headers-*
+    And set them for autoremoval, so kthresher can be used for testing.
+    '''
+    
+    import apt
+    import re
+    from platform import uname
+    
+    def autorm_install(pkgs):
+        '''Install a list of packages and set them autoremovable.
+        '''
+        latest_kernel = ''
+        ac = apt.Cache()
+        for pkg in pkgs:
+            latest_kernel = pkg
+            k = ac[pkg]
+            if not k.is_installed:
+                k.mark_install(from_user=False)
+        try:
+            ac.commit(install_progress=None)
+        except SystemError:
+            print('Something failed')
+            sys.exit(1)
+    
+    def get_kernels():
+        '''Get a list of all the kernels/headers available of the form:
+        linux-image-* and linux-headers-*
+        and install them.
+        '''
+        kernels = []
+        ac = apt.Cache()
+        ac.update()
+        for pkg in ac:
+            if re.match("^linux-(image|headers)-\d\..*-generic$", pkg.name):
+                if not pkg.name == 'linux-image-{0}'.format(uname()[2]):
+                    kernels.append(pkg.name)
+        return kernels
+    
+    def main():
+        kernels = get_kernels()
+        autorm_install(kernels)
+    
+    if __name__ == "__main__":
+        main()
+
 
 
 Known Issues
