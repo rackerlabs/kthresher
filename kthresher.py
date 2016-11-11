@@ -36,6 +36,7 @@ import sys
 import logging
 import argparse
 import ConfigParser
+from glob import iglob
 from platform import uname, dist
 from distutils.version import LooseVersion
 
@@ -59,11 +60,12 @@ def get_configs(conf_file, section):
     '''Obtains the configs from a file.
     Config file format: INI
     Valid sections: main
-    Valid options: dry_run, headers, keep, purge, verbose
+    Valid options: dry_run, headers, include, keep, purge, verbose
     Example:
     [main]
     dry_run=(yes|on|true|no|off|false)
     headers=(yes|on|true|no|off|false)
+    include=/path/to/dir/
     keep=[0-9]
     purge=(yes|on|true|no|off|false)
     verbose=(yes|on|true|no|off|false)
@@ -71,6 +73,7 @@ def get_configs(conf_file, section):
     valid_configs = {
         'dry_run': 'boolean',
         'headers': 'boolean',
+        'include': 'str',
         'keep': 'int',
         'purge': 'boolean',
         'verbose': 'boolean',
@@ -96,6 +99,7 @@ def get_configs(conf_file, section):
                      .format(section))
         return configs
     logging.info('Options found: {0}.'.format(def_conf.options(section)))
+    # Validation of the options found
     for option in def_conf.options(section):
         if not option in valid_configs.keys():
             logging.info('Invalid setting "{0}", ignoring'.format(option))
@@ -120,7 +124,25 @@ def get_configs(conf_file, section):
                     logging.error('Error, unable to get value from "{0}".'
                                   .format(option))
                     sys.exit(1)
+            elif valid_configs[option] == 'str':
+                try:
+                    configs[option] = def_conf.get(section, option)
+                except ConfigParser.NoOptionError:
+                     logging.error('Error, unable to get value from "{0}".'
+                                  .format(option))
             logging.info('\t{0} = {1}'.format(option, configs[option]))
+    if "include" in configs.keys():
+        # Obtain the configs on each nested config file.
+        for nested_file in sorted(iglob(configs['include'])):
+            # Aborting if importing the same config file.
+            # Won't prevent indirect loops.
+            if nested_file == conf_file:
+                logging.error('Error, looping config files, aborting...')
+                sys.exit(1)
+            nested_configs = get_configs(nested_file, section)
+            # Override any option coming from the nested configs.
+            for nested_config in nested_configs:
+                configs[nested_config] = nested_configs[nested_config]
     return configs
 
 
@@ -156,7 +178,9 @@ def show_autoremovable_pkgs():
 
 def kthreshing(purge=None, headers=None, keep=1):
     '''Purge or list the unused kernels.
-    By default keeps 1, besides the running kernel.
+    By default keeps 1.
+    The running kernel, the kernels marked as NeverAutoRemove and
+    Manually installed kernels are nevertouched by kthresher.
     '''
     kernels = {}
     ver_max_len = 0
@@ -282,7 +306,8 @@ def main():
         conf_options = get_configs(defaults['config']['file'],
                                    defaults['config']['section'])
     # Overriding options as follows:
-    # defaults -> default config file or custom config file -> cli arguments
+    # defaults -> default config file or custom config file -> included config
+    # -> cli arguments
     # First overriding default configs from a file if available:
     if conf_options:
         options.update(conf_options)
@@ -294,7 +319,7 @@ def main():
         options['dry_run'] = args.dry_run
     if args.headers:
         options['headers'] = args.headers
-    if args.keep:
+    if args.keep is not None:
         options['keep'] = args.keep
     if args.purge:
         options['purge'] = args.purge
