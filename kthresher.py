@@ -60,10 +60,9 @@ def get_configs(conf_file, section):
     '''Obtains the configs from a file.
     Config file format: INI
     Valid sections: main
-    Valid options: dry_run, headers, include, keep, purge, verbose
+    Valid options: headers, include, keep, purge, verbose
     Example:
     [main]
-    dry_run=(yes|on|true|no|off|false)
     headers=(yes|on|true|no|off|false)
     include=/path/to/dir/
     keep=[0-9]
@@ -71,7 +70,6 @@ def get_configs(conf_file, section):
     verbose=(yes|on|true|no|off|false)
     '''
     valid_configs = {
-        'dry_run': 'boolean',
         'headers': 'boolean',
         'include': 'str',
         'keep': 'int',
