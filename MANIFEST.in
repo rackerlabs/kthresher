@@ -1,2 +1,4 @@
 include LICENSE
 include README.rst
+include kthresher.conf
+include kthresher.8
