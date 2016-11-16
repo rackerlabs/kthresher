@@ -1,4 +1,4 @@
-.TH kthresher 8 "June 2016" "kthresher v1.2.2"
+.TH kthresher 8 "November 2016" "kthresher v1.2.5"
 .SH "NAME"
 kthresher \- purge unused kernels
 .SH "SYNOPSIS"
@@ -10,8 +10,11 @@ kthresher \- purge unused kernels
 .SH "DESCRIPTION"
 .I kthresher
 is a utility to remove kernel packages that are marked as a candidate for autoremoval, such as those installed via unattended\-upgrades or meta packages. 
+.PP
+By default the running kernel, the latest kernel and manual installations are marked to 'Never Auto Remove'.
 .PP 
-By default the latest kernel and manual installations are marked to 'Never Auto Remove'.
+.I "kthresher"
+will not attempt to remove those packages.
 .SH "OPTIONS"
 .TP
 .B "\-h, \-\-help"
@@ -44,6 +47,13 @@ Be verbose
 .TP
 .B "\-V, \-\-version"
 Print version
+.SH FILES
+.TP
+.B \fBMain Configuration\fP
+/etc/kthresher.conf
+.TP
+.B \fBOverriding configs\fP
+/etc/kthresher.d
 .SH "REPORTING BUGS"
 Bugs and issues to be submitted via github <https://github.com/rackerlabs/kthresher/issues>.
 .SH "AUTHOR"

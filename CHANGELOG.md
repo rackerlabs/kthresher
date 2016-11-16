@@ -1,9 +1,18 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - 2016-09-15
+## [1.2.5] - 2016-11-15
+### Added
+- Support for nested config files through `include` setting.
+- README info about how a package is marked for autoremoval.
+- README info to be able to perform tests by installing kernels and headers.
+
+### Changed
+- Default config file to only include a `include` path for `/etc/kthresher.d/*.conf`
+
 ### Removed
 - Debian dir and drone configs, will not live now with the code, @thebwt will maintain that now.
+- Config file support for dry-run, this is now only available through command line arguments.
 
 ## [1.2.4] - 2016-09-02
 ### Added
