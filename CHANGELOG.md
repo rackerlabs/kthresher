@@ -1,6 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.2.6] - 2017-01-30
+### Added
+- Support to amd64 kernels.
+
+### Changed
+- Consistency between `--show` and `--purge`.
+- Sytle improvements(pep8).
+- Man page update.
+
 ## [1.2.5] - 2016-11-15
 ### Added
 - Support for nested config files through `include` setting.
