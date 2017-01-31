@@ -53,7 +53,7 @@ except ImportError:
     sys.exit(1)
 
 
-__version__ = "1.2.5"
+__version__ = "1.2.6"
 
 
 def get_configs(conf_file, section):
@@ -99,7 +99,7 @@ def get_configs(conf_file, section):
     logging.info('Options found: {0}.'.format(def_conf.options(section)))
     # Validation of the options found
     for option in def_conf.options(section):
-        if not option in valid_configs.keys():
+        if option not in valid_configs.keys():
             logging.info('Invalid setting "{0}", ignoring'.format(option))
         else:
             logging.info('Valid setting found "{0}"'.format(option))
@@ -126,7 +126,7 @@ def get_configs(conf_file, section):
                 try:
                     configs[option] = def_conf.get(section, option)
                 except ConfigParser.NoOptionError:
-                     logging.error('Error, unable to get value from "{0}".'
+                    logging.error('Error, unable to get value from "{0}".'
                                   .format(option))
             logging.info('\t{0} = {1}'.format(option, configs[option]))
     if "include" in configs.keys():
@@ -158,7 +158,8 @@ def show_autoremovable_pkgs():
         pkg = apt_cache[pkg_name]
         if (
            (pkg.is_installed and pkg.is_auto_removable) and
-           (pkg.section == 'kernel' or re.match("^linux-.*$", pkg_name))
+           (pkg.section == 'kernel' or
+            re.match("^linux-.*(-generic|-virtual|-amd64)$", pkg_name))
            ):
             packages[pkg_name] = pkg.installed.version
             if ver_max_len < len(pkg.installed.version):
@@ -182,8 +183,8 @@ def kthreshing(purge=None, headers=None, keep=1):
     '''
     kernels = {}
     ver_max_len = 0
-    kernel_image_regex = '^linux-image.*(-generic|-virtual)$'
-    kernel_header_regex = '^linux-header.*(-generic|-virtual)?$'
+    kernel_image_regex = '^linux-image.*(-generic|-virtual|-amd64)$'
+    kernel_header_regex = '^linux-header.*(-generic|-virtual|-amd64)?$'
     try:
         apt_cache = apt.Cache()
     except:
