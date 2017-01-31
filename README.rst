@@ -11,7 +11,7 @@ By default, on apt 1.0 and below, the booted kernel, the latest-installed kernel
 
 -----
 
-|version| |downloads| |versions| |license|
+|version| |downloads-pypi| |versions| |license| |stars-github|
 
 -----
 
@@ -365,15 +365,18 @@ Submit Bug reports, feature requests via `issues <https://github.com/rackerlabs/
 -----
 
 .. |version| image:: https://img.shields.io/pypi/v/kthresher.svg
-        :target: https://pypi.python.org/pypi/kthresher/
+        :target: https://github.com/rackerlabs/kthresher/releases/latest
         :alt: Latest Version
-.. |downloads| image:: https://img.shields.io/pypi/dm/kthresher.svg
+.. |downloads-pypi| image:: https://img.shields.io/pypi/dm/kthresher.svg
         :target: https://pypi.python.org/pypi/kthresher
-        :alt: Downloads
+        :alt: PyPi Downloads
+.. |stars-github| image::	https://img.shields.io/github/stars/rackerlabs/kthresher.svg
+        :target: https://github.com/rackerlabs/kthresher
+        :alt: Github Stars
 .. |versions| image:: https://img.shields.io/pypi/pyversions/kthresher.svg
-        :target: https://pypi.python.org/pypi/kthresher/
+        :target: https://github.com/rackerlabs/kthresher/releases
         :alt: Versions
 .. |license| image:: https://img.shields.io/pypi/l/kthresher.svg
-        :target: https://pypi.python.org/pypi/kthresher/
+        :target: https://github.com/rackerlabs/kthresher/blob/master/LICENSE
         :alt: License
 
