@@ -159,7 +159,7 @@ def show_autoremovable_pkgs():
         if (
            (pkg.is_installed and pkg.is_auto_removable) and
            (pkg.section == 'kernel' or
-            re.match("^linux-.*(-generic|-virtual|-amd64)$", pkg_name))
+            re.match("^linux-.*-(generic|virtual|amd64|common)?$", pkg_name))
            ):
             packages[pkg_name] = pkg.installed.version
             if ver_max_len < len(pkg.installed.version):
@@ -183,8 +183,8 @@ def kthreshing(purge=None, headers=None, keep=1):
     '''
     kernels = {}
     ver_max_len = 0
-    kernel_image_regex = '^linux-image.*(-generic|-virtual|-amd64)$'
-    kernel_header_regex = '^linux-header.*(-generic|-virtual|-amd64)?$'
+    kernel_image_regex = '^linux-image.*-(generic|virtual|amd64)$'
+    kernel_header_regex = '^linux-headers.*-(generic|virtual|amd64|common)?$'
     try:
         apt_cache = apt.Cache()
     except:

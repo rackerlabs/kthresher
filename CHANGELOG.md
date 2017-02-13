@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Changed
+- Regex to include linux-headers ending in -common.
+
 ## [1.2.6] - 2017-01-30
 ### Added
 - Support to amd64 kernels.
