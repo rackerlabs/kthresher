@@ -1,3 +1,5 @@
+|logo0|
+
 kthresher
 =========
 
@@ -361,6 +363,20 @@ Bugs
 
 Submit Bug reports, feature requests via `issues <https://github.com/rackerlabs/kthresher/issues>`__.
 
+Logos
+-----
+
+The art was created by `Carlos Garcia <http://carlosgarcia.site>`__ <hellyeahdesign AT gmail DOT com> and released under CC BY-SA 4.0
+
++---------+---------+
+| |logo0| | |logo1| |
++---------+---------+
+| |logo2| | |logo3| |
++---------+---------+
+
+.. image:: https://i.creativecommons.org/l/by-sa/4.0/88x31.png
+   :target: http://creativecommons.org/licenses/by-sa/4.0/
+   :alt: Creative Commons License
 
 -----
 
@@ -380,3 +396,10 @@ Submit Bug reports, feature requests via `issues <https://github.com/rackerlabs/
         :target: https://github.com/rackerlabs/kthresher/blob/master/LICENSE
         :alt: License
 
+.. |logo0| image:: https://github.com/rackerlabs/kthresher/wiki/img/kthresher.png      
+
+.. |logo1| image:: https://github.com/rackerlabs/kthresher/wiki/img/kthresher_horiz.png
+
+.. |logo2| image:: https://github.com/rackerlabs/kthresher/wiki/img/kthresher_circ.png
+
+.. |logo3| image:: https://github.com/rackerlabs/kthresher/wiki/img/kthresher_half.png
