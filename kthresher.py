@@ -53,7 +53,7 @@ except ImportError:
     sys.exit(1)
 
 
-__version__ = "1.2.6"
+__version__ = "1.2.7"
 
 
 def get_configs(conf_file, section):
