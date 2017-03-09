@@ -301,7 +301,7 @@ Dry run including headers
 Testing
 -------
 
-The below code can be used to install all the kernels and headers available of the form "linux-(image|headers)-[0-9].*-generic" at the end it should end up with two or three kernels in the NeverAutoRemove list, including the latest, the prior to latest and the running kernel.
+The below code can be used to install all the kernels and headers available of the form "linux-(image|headers)-[0-9].*-(generic|amd64)" at the end it should end up with two or three kernels in the NeverAutoRemove list, including the latest, the prior to latest and the running kernel.
 
 .. code-block:: python
 
@@ -338,8 +338,9 @@ The below code can be used to install all the kernels and headers available of t
         kernels = []
         ac = apt.Cache()
         ac.update()
+        kernel_regex = "^linux-(image|headers)-\d\..*-(generic|amd64$"
         for pkg in ac:
-            if re.match("^linux-(image|headers)-\d\..*-generic$", pkg.name):
+            if re.match(kernel_regex, pkg.name):
                 if not pkg.name == 'linux-image-{0}'.format(uname()[2]):
                     kernels.append(pkg.name)
         return kernels
