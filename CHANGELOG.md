@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [1.2.7] - 2017-03-09
 ### Added
 - Better error handling when executing as non-root.
 - Logos.
