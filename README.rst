@@ -310,8 +310,9 @@ The below code can be used to install all the kernels and headers available of t
     And set them for autoremoval, so kthresher can be used for testing.
     '''
     
-    import apt
     import re
+    import apt
+    import sys
     from platform import uname
     
     def autorm_install(pkgs):
@@ -326,6 +327,9 @@ The below code can be used to install all the kernels and headers available of t
                 k.mark_install(from_user=False)
         try:
             ac.commit(install_progress=None)
+        except apt.cache.LockFailedException as lfe:
+            print('{}, are you root?'.format(lfe))
+            sys.exit(1)
         except SystemError:
             print('Something failed')
             sys.exit(1)
@@ -338,7 +342,7 @@ The below code can be used to install all the kernels and headers available of t
         kernels = []
         ac = apt.Cache()
         ac.update()
-        kernel_regex = "^linux-(image|headers)-\d\..*-(generic|amd64$"
+        kernel_regex = "^linux-(image|headers)-\d\..*-(generic|amd64)$"
         for pkg in ac:
             if re.match(kernel_regex, pkg.name):
                 if not pkg.name == 'linux-image-{0}'.format(uname()[2]):
