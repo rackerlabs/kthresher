@@ -243,6 +243,9 @@ def kthreshing(purge=None, headers=None, keep=1):
                         fetch_progress=apt.progress.text.AcquireProgress(),
                         install_progress=apt.progress.base.InstallProgress()
                     )
+                except apt.cache.LockFailedException as lfe:
+                    logging.error('{}, are you root?'.format(lfe))
+                    sys.exit(1)
                 except SystemError:
                     logging.error('Unable to commit the changes')
                     sys.exit(1)

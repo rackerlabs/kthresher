@@ -2,8 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Added
+- Better error handling when executing as non-root.
+- Logos.
+
 ### Changed
 - Regex to include linux-headers ending in -common.
+- Improved the testing example on the README.
 
 ## [1.2.6] - 2017-01-30
 ### Added
