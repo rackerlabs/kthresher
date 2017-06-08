@@ -301,7 +301,7 @@ Dry run including headers
 Testing
 -------
 
-The below code can be used to install all the kernels and headers available of the form "linux-(image|headers)-[0-9].*-(generic|amd64)" at the end it should end up with two or three kernels in the NeverAutoRemove list, including the latest, the prior to latest and the running kernel.
+The below code can be used to install up to a fixed amount of kernels and headers if available of the form "linux-(image|headers)-[0-9].*-(generic|amd64)" at the end it should end up with two or three kernels in the NeverAutoRemove list, including the latest, the prior to latest and the running kernel.
 
 .. code-block:: python
 
@@ -334,25 +334,38 @@ The below code can be used to install all the kernels and headers available of t
             print('Something failed')
             sys.exit(1)
     
-    def get_kernels():
-        '''Get a list of all the kernels/headers available of the form:
-        linux-image-* and linux-headers-*
-        and install them.
+    def get_pkg(regex):
+        '''Get a list of packages available that match the regex.
         '''
-        kernels = []
+        pkgs = []
         ac = apt.Cache()
         ac.update()
-        kernel_regex = "^linux-(image|headers)-\d\..*-(generic|amd64)$"
         for pkg in ac:
-            if re.match(kernel_regex, pkg.name):
-                if not pkg.name == 'linux-image-{0}'.format(uname()[2]):
-                    kernels.append(pkg.name)
-        return kernels
+            if re.match(regex, pkg.name):
+                # ignore running kernel
+                if pkg.name == 'linux-image-{0}'.format(uname()[2]):
+                    continue
+                pkgs.append(pkg.name)
+        return pkgs
     
     def main():
-        kernels = get_kernels()
-        autorm_install(kernels)
-    
+        limit = 5
+        if len(sys.argv) > 1:
+            try:
+                limit = int(sys.argv[1])
+            except:
+                print("Use an integer as the limit of pkgs to install.")
+                sys.exit(1)
+        print("Installing {} kernels/headers if available...".format(limit))
+        kernel_regex = "^linux-image-\d\..*-(generic|amd64)$"
+        header_regex = "^linux-headers-\d\..*-(generic|amd64)$"
+        kernels = get_pkg(kernel_regex)
+        headers = get_pkg(header_regex)
+        pkgs = kernels[0:limit] + headers[0:limit]
+        print("Installing {} packages total\n\tkernels: {}\n\theaders: {}"
+              .format(len(pkgs), kernels[0:limit], headers[0:limit]))
+        autorm_install(pkgs)
+
     if __name__ == "__main__":
         main()
 
