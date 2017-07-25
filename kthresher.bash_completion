@@ -25,13 +25,12 @@ genOpts()
     OLDIFS=${IFS}
     # set IFS to split our pairs
     IFS=","
-    set -- ${i}``
+    set -- ${i}
     # reset IFS to original value
     IFS=${OLDIFS}
-    if ! $( containsElement "${1}" "${COMP_WORDS[@]}" ) && \
+    if ! $( containsElement "${1}" "${COMP_WORDS[@]}" ) &&
        ! $( containsElement "${2}" "${COMP_WORDS[@]}" ); then
-         not_used="${not_used} ${1}"
-         not_used="${not_used} ${2}"
+         not_used="${not_used} ${1} ${2}"
     fi
   done
   echo "${not_used}"
