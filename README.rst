@@ -96,7 +96,7 @@ Github
 
 .. code-block:: bash
 
-    git clone https://https://github.com/rackerlabs/kthresher.git
+    git clone https://github.com/rackerlabs/kthresher.git
     cd kthresher && python setup.py install
 
 
