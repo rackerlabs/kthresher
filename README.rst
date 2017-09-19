@@ -181,7 +181,7 @@ Purge Unused Kernels, keep 3 kernels and be verbose
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. code-block::
 
-    # kthresher -p -k3 v
+    # kthresher -p -k3 -v
     INFO: Attempting to read /etc/kthresher.conf.
     INFO: Config file /etc/kthresher.conf is empty or does not exist, ignoring.
     INFO: Options: {'purge': True, 'verbose': True, 'dry_run': False, 'keep': 3}
