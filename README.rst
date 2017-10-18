@@ -75,7 +75,7 @@ script
 
 .. code-block:: bash
 
-    wget -O kthresher https://raw.githubusercontent.com/rackerlabs/kthresher/master/kthresher/kthresher.py
+    wget -O kthresher https://raw.githubusercontent.com/rackerlabs/kthresher/master/kthresher.py
     chmod u+x kthresher
 
 pip
