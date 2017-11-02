@@ -213,6 +213,8 @@ def kthreshing(purge=None, headers=None, keep=1):
                ):
                 if pkg.installed.version in kernels.keys():
                     kernels[pkg.installed.version].append(pkg.name)
+                else:
+                    kernels[pkg.installed.version] = [pkg.name]
     if kernels:
         logging.info('Attempting to keep {0} kernel package(s)'.format(keep))
         kernel_versions = list(kernels.copy().keys())
