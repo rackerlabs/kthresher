@@ -9,6 +9,11 @@ This tool removes those kernel packages marked as candidate for autoremoval. Tho
 
 By default, on apt 1.0 and below, the booted kernel, the latest-installed kernel and the latest kernel are set to "NeverAutoRemove". Or, for apt 1.2 and above, the booted kernel, the latest-installed kernel, the latest kernel and the second-latest kernel are set to "NeverAutoRemove".
 
+Ubuntu has multiple suggestions on how to remove kernels:
+  https://help.ubuntu.com/community/RemoveOldKernels
+
+A good recommendation is using unattendend-upgrades(`debian <https://wiki.debian.org/UnattendedUpgrades>`__, `ubuntu <https://help.ubuntu.com/community/AutomaticSecurityUpdates>`__) as it has an option to remove unused dependencies, but that applies to all packages not just kernels.
+
 *thresher - A device that first separates the head of a stalk of grain from the straw, and then further separates the kernel from the rest of the head.*
 
 -----
