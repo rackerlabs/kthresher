@@ -22,10 +22,10 @@ Those packages are generally installed via Unattended upgrade or meta-packages
 By default the latest kernel and manual installations are marked to Never
 Auto Remove.
 
-Ubuntu suggestions on how to remove kernels:
-  https://help.ubuntu.com/community/Lubuntu/Documentation/RemoveOldKernels
-It uses a shell script:
-http://bazaar.launchpad.net/~kirkland/byobu/trunk/view/head:/usr/bin/purge-old-kernels
+Ubuntu has multiple suggestions on how to remove kernels:
+  https://help.ubuntu.com/community/RemoveOldKernels
+
+A good recommendation is using unattendend-upgrades as it has an option to remove unused dependencies, but that applies to all packages not just kernels.
 
 thresher - A device that first separates the head of a stalk of grain from
 the straw, and then further separates the kernel from the rest of the head.
