@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+containsElement()
+{
+  # 0 if string in $1 is in the array
+  # 1 if not
+  local e
+  for e in "${@:2}"; do
+    if [[ "${e}" == "${1}" ]]; then
+        return 0
+    fi
+  done
+  return 1
+}
+
+genOpts()
+{
+  local OLDIFS
+  local IFS
+  local not_used=""
+  # options in pairs
+  local opts="--help,-h --config,-c --dry-run,-d --headers,-H --keep,-k --purge,-p "
+  opts+="--show-autoremoval,-s --verbose,-v --version,-V"
+  for i in ${opts} ; do
+    OLDIFS=${IFS}
+    # set IFS to split our pairs
+    IFS=","
+    set -- ${i}``
+    # reset IFS to original value
+    IFS=${OLDIFS}
+    if ! $( containsElement "${1}" "${COMP_WORDS[@]}" ) && \
+       ! $( containsElement "${2}" "${COMP_WORDS[@]}" ); then
+         not_used="${not_used} ${1}"
+         not_used="${not_used} ${2}"
+    fi
+  done
+  echo "${not_used}"
+}
+
+_kthresher()
+{
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    local prev=${COMP_WORDS[COMP_CWORD-1]}
+    #echo "Genopts $(genOpts) COMP_WORDS ${COMP_WORDS[@]}"
+    COMPREPLY=( $(compgen -W "$(genOpts)" -- ${cur} ) )
+}
+
+complete -F _kthresher kthresher
