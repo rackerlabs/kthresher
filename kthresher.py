@@ -107,8 +107,7 @@ def get_configs(conf_file, section):
             if valid_configs[option] == 'int':
                 try:
                     configs[option] = def_conf.getint(section, option)
-                except:
-                    ConfigParser.NoOptionError
+                except ConfigParser.NoOptionError:
                     logging.error('Error, unable to get value from "{0}".'
                                   .format(option))
                     sys.exit(1)
@@ -152,27 +151,37 @@ def show_autoremovable_pkgs():
     ver_max_len = 0
     try:
         apt_cache = apt.Cache()
-    except:
-        print('Error, unable to obtain the cache!', file=sys.stderr)
+    except SystemError:
+        logging.error('Unable to obtain the cache!')
         sys.exit(1)
     for pkg_name in apt_cache.keys():
         pkg = apt_cache[pkg_name]
         if (
            (pkg.is_installed and pkg.is_auto_removable) and
-            re.match("^linux-(image|(\w+-)?headers)-.*$", pkg_name)
+           re.match("^linux-(image|(\w+-)?headers)-.*$", pkg_name)
            ):
             packages[pkg_name] = pkg.installed.version
             if ver_max_len < len(pkg.installed.version):
                 ver_max_len = len(pkg.installed.version)
     if packages:
-        print('List of kernel packages available for autoremoval:')
-        print('{0:>{width}} {1:<{width}}'.format('Version', 'Package',
-              width=ver_max_len+2))
+        logging.info('List of kernel packages available for autoremoval:')
+        logging.info('{0:>{width}} {1:<{width}}'
+                     .format(
+                             'Version',
+                             'Package',
+                             width=ver_max_len+2,
+                             )
+                     )
         for package in sorted(packages.keys()):
-            print('{0:>{width}} {1:<{width}}'
-                  .format(packages[package], package, width=ver_max_len+2))
+            logging.info('{0:>{width}} {1:<{width}}'
+                         .format(
+                                 packages[package],
+                                 package,
+                                 width=ver_max_len+2,
+                                 )
+                         )
     else:
-        print('No kernel packages available for autoremoval.')
+        logging.info('No kernel packages available for autoremoval.')
 
 
 def kthreshing(purge=None, headers=None, keep=1):
@@ -187,8 +196,8 @@ def kthreshing(purge=None, headers=None, keep=1):
     kernel_header_regex = '^linux-(\w+-)?headers-.*$'
     try:
         apt_cache = apt.Cache()
-    except:
-        print('Error, unable to obtain the cache!', file=sys.stderr)
+    except SystemError:
+        logging.error('Unable to obtain the cache!')
         sys.exit(1)
     current_kernel_ver = uname()[2]
     kernel_pkg = apt_cache["linux-image-%s" % current_kernel_ver]
@@ -332,6 +341,7 @@ def main():
     logging.info('Options: {0}'.format(options))
     # Show auto-removable, this is only available via explicit argument
     if args.show_autoremoval:
+        logging.getLogger().setLevel(logging.INFO)
         show_autoremovable_pkgs()
         sys.exit(0)
     if options['dry_run']:
@@ -350,7 +360,7 @@ def main():
         )
         sys.exit(0)
     else:
-        print('Error, no argument used.', file=sys.stderr)
+        logging.error('No argument used.')
         parser.print_help()
         sys.exit(1)
 
