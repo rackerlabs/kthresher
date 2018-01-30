@@ -25,7 +25,8 @@ Auto Remove.
 Ubuntu has multiple suggestions on how to remove kernels:
   https://help.ubuntu.com/community/RemoveOldKernels
 
-A good recommendation is using unattendend-upgrades as it has an option to remove unused dependencies, but that applies to all packages not just kernels.
+A good recommendation is using unattendend-upgrades as it has an option to
+remove unused dependencies, but that applies to all packages not just kernels.
 
 thresher - A device that first separates the head of a stalk of grain from
 the straw, and then further separates the kernel from the rest of the head.
@@ -53,7 +54,7 @@ except ImportError:
     sys.exit(1)
 
 
-__version__ = "1.2.7"
+__version__ = "1.3.0"
 
 
 def get_configs(conf_file, section):
@@ -158,8 +159,7 @@ def show_autoremovable_pkgs():
         pkg = apt_cache[pkg_name]
         if (
            (pkg.is_installed and pkg.is_auto_removable) and
-           (pkg.section == 'kernel' or
-            re.match("^linux-.*-(generic|virtual|amd64|common)?$", pkg_name))
+            re.match("^linux-(image|(\w+-)?headers)-.*$", pkg_name)
            ):
             packages[pkg_name] = pkg.installed.version
             if ver_max_len < len(pkg.installed.version):
@@ -183,8 +183,8 @@ def kthreshing(purge=None, headers=None, keep=1):
     '''
     kernels = {}
     ver_max_len = 0
-    kernel_image_regex = '^linux-image.*-(generic|virtual|amd64)$'
-    kernel_header_regex = '^linux-headers.*-(generic|virtual|amd64|common)?$'
+    kernel_image_regex = '^linux-image-.*$'
+    kernel_header_regex = '^linux-(\w+-)?headers-.*$'
     try:
         apt_cache = apt.Cache()
     except:
@@ -198,7 +198,7 @@ def kthreshing(purge=None, headers=None, keep=1):
         pkg = apt_cache[pkg_name]
         if (
            (pkg.is_installed and pkg.is_auto_removable) and
-           (pkg.section == 'kernel' and
+           ('kernel' in pkg.section and
             re.match(kernel_image_regex, pkg_name))
            ):
             if ver_max_len < len(pkg.installed.version):
