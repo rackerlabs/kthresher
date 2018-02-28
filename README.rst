@@ -65,12 +65,12 @@ Supported Operating Systems
 
 * Debian (Tested on Version(s))
     * `8 <https://www.debian.org/releases/jessie/>`__
-    * `stretch <https://www.debian.org/releases/stretch/>`__
+    * `9 <https://www.debian.org/releases/stretch/>`__
 * Ubuntu (Tested on Version(s))
     * `12.04 <http://releases.ubuntu.com/precise/>`__
     * `14.04 <http://releases.ubuntu.com/trusty/>`__
-    * `15.10 <http://releases.ubuntu.com/wily/>`__
     * `16.04 <http://releases.ubuntu.com/xenial/>`__
+    * `17.10 <http://releases.ubuntu.com/artful/>`__
 
 
 Installation
@@ -389,7 +389,7 @@ Submit Bug reports, feature requests via `issues <https://github.com/rackerlabs/
 Logos
 -----
 
-The art was created by `Carlos Garcia <http://carlosgarcia.site>`__ <hellyeahdesign AT gmail DOT com> and released under CC BY-SA 4.0
+The art was created by `Carlos Garcia <https://hellyeahdesign.com.mx>`__ <hellyeahdesign AT gmail DOT com> and released under CC BY-SA 4.0
 
 +---------+---------+
 | |logo0| | |logo1| |
