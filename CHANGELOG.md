@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.3.0] - 2018-01-30
+### Added
+- Bash completion
+
+### Changed
+- Support to most/all kernel/header packages [flavors used in Ubuntu](https://people.canonical.com/~kernel/info/kernel-version-pockets.txt)
+- Using logging consistently.
+- PEP8 compliant.
+
 ## [1.2.7] - 2017-03-09
 ### Added
 - Better error handling when executing as non-root.
@@ -114,3 +123,12 @@ All notable changes to this project will be documented in this file.
 ## [0.2.1] - 2015-10-12
 ### Added
 - Released kthresher.
+
+---
+
+# Contributors
+- [delag](https://github.com/delag)
+- [disengage00](https://github.com/disengage00)
+- [jamrok](https://github.com/jamrok)
+- [Jose R. Gonzalez](https://github.com/Komish)
+- [Tony G.](https://github.com/tonyskapunk)
