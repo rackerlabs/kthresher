@@ -29,7 +29,7 @@ setuptools.setup(
                       'candidates for autoremoval.'),
     url='https://github.com/rackerlabs/kthresher',
     author='Tony Garcia',
-    author_email='tony DOT garcia AT rackspace DOT com',
+    author_email='tony.garcia@rackspace.com',
     license='Apache License, Version 2.0',
     entry_points={
         'console_scripts': [
