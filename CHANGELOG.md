@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.3.1] - 2018-04-23
+### Added
+- Removed shell from bash completion.
+- Added license to bash completion.
+
 ## [1.3.0] - 2018-01-30
 ### Added
 - Bash completion
