@@ -1,0 +1,9 @@
+[Unit]
+Description=Run kthresher daily
+
+[Timer]
+OnCalendar=daily
+Persistent=True
+
+[Install]
+WantedBy=timers.target
