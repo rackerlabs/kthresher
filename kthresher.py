@@ -359,6 +359,8 @@ def main():
             keep=options['keep']
         )
         sys.exit(0)
+    if not sys.stdout.isatty():
+        sys.exit(0)
     else:
         logging.error('No argument used.')
         parser.print_help()
