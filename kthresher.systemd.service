@@ -1,0 +1,7 @@
+[Unit]
+Description=Purge unused kernels
+Documentation=man:kthresher(8)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/kthresher
