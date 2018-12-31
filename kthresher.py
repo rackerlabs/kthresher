@@ -41,7 +41,7 @@ from platform import uname
 from distutils.version import LooseVersion
 
 try:
-    from configparser import ConfigParser
+    import configparser as ConfigParser
 except ImportError:
     import ConfigParser
 
