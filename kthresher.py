@@ -36,21 +36,33 @@ import re
 import sys
 import logging
 import argparse
-import ConfigParser
 from glob import iglob
-from platform import uname, dist
+from platform import uname
 from distutils.version import LooseVersion
+
+try:
+    import configparser as ConfigParser
+except ImportError:
+    import ConfigParser
 
 try:
     import apt
 except ImportError:
-    DISTRO = dist()[0]
+    try:
+        import distro
+    except ImportError:
+        from platform import dist
+        DISTRO = dist()[0]
+    else:
+        DISTRO = distro.linux_distribution(False)[0]
+
     if DISTRO == 'debian' or DISTRO == 'Ubuntu':
-        print('Error, python apt library was not found\n'
+        print('Error: python apt library was not found\n'
               'python-apt and/or python3-apt packages provide it.',
               file=sys.stderr)
     else:
-        print('{0} distro not supported'.format(DISTRO), file=sys.stderr)
+        print('Error: {0} distro not supported'.format(DISTRO),
+              file=sys.stderr)
     sys.exit(1)
 
 
