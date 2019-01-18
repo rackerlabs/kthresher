@@ -41,9 +41,14 @@ from platform import uname
 from distutils.version import LooseVersion
 
 try:
-    import configparser as ConfigParser
+    import configparser
 except ImportError:
-    import ConfigParser
+    import ConfigParser as configparser
+
+try:
+    Parser = configparser.ConfigParser
+except AttributeError:
+    Parser = configparser.SafeConfigParser
 
 try:
     import apt
@@ -92,11 +97,11 @@ def get_configs(conf_file, section):
         "verbose": "boolean",
     }
     configs = {}
-    def_conf = ConfigParser.ConfigParser()
+    def_conf = Parser()
     logging.info("Attempting to read {0}.".format(conf_file))
     try:
         def_conf.read(conf_file)
-    except ConfigParser.ParsingError:
+    except configparser.ParsingError:
         logging.error("Error, File contains parsing errors: {0}".format(conf_file))
         sys.exit(1)
     if not def_conf.read(conf_file):
@@ -120,7 +125,7 @@ def get_configs(conf_file, section):
             if valid_configs[option] == "int":
                 try:
                     configs[option] = def_conf.getint(section, option)
-                except ConfigParser.NoOptionError:
+                except configparser.NoOptionError:
                     logging.error(
                         'Error, unable to get value from "{0}".'.format(option)
                     )
@@ -132,7 +137,7 @@ def get_configs(conf_file, section):
             elif valid_configs[option] == "boolean":
                 try:
                     configs[option] = def_conf.getboolean(section, option)
-                except ConfigParser.NoOptionError:
+                except configparser.NoOptionError:
                     logging.error(
                         'Error, unable to get value from "{0}".'.format(option)
                     )
@@ -140,7 +145,7 @@ def get_configs(conf_file, section):
             elif valid_configs[option] == "str":
                 try:
                     configs[option] = def_conf.get(section, option)
-                except ConfigParser.NoOptionError:
+                except configparser.NoOptionError:
                     logging.error(
                         'Error, unable to get value from "{0}".'.format(option)
                     )
