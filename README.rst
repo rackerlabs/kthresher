@@ -376,11 +376,6 @@ The below code can be used to install up to a fixed amount of kernels and header
 
 
 
-Known Issues
-------------
-Python3 support is currently broken due to a known disutils.LooseVersion `issue <https://bugs.python.org/issue14894>`__.
-
-
 Bugs
 ----
 

@@ -28,7 +28,7 @@ setuptools.setup(
     version=get_version(),
     description=("Purge Unused Kernels."),
     long_description=(
-        "Tool to remove kernel image packages marked as " "candidates for autoremoval."
+        "Tool to remove kernel image packages marked as candidates for autoremoval."
     ),
     url="https://github.com/rackerlabs/kthresher",
     author="Tony Garcia",
@@ -46,6 +46,10 @@ setuptools.setup(
         "Operating System :: POSIX :: Linux",
         "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
     ],
     data_files=[("/etc", ["kthresher.conf"]), ("/usr/share/man/man8", ["kthresher.8"])],
 )
