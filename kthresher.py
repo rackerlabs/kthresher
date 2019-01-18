@@ -92,7 +92,7 @@ def get_configs(conf_file, section):
         "verbose": "boolean",
     }
     configs = {}
-    def_conf = ConfigParser.SafeConfigParser()
+    def_conf = ConfigParser.ConfigParser()
     logging.info("Attempting to read {0}.".format(conf_file))
     try:
         def_conf.read(conf_file)
