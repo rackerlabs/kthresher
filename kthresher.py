@@ -76,6 +76,38 @@ except ImportError:
 __version__ = "1.3.1"
 
 
+def cmp_to_key(mycmp):
+    """Convert a cmp= function into a key= function
+    Wrapper to leverage the use of apt_pkg.version_compare.
+    As documented in:
+    https://docs.python.org/3/howto/sorting.html#the-old-way-using-the-cmp-parameter
+    """
+
+    class K:
+        def __init__(self, obj, *args):
+            self.obj = obj
+
+        def __lt__(self, other):
+            return mycmp(self.obj, other.obj) < 0
+
+        def __gt__(self, other):
+            return mycmp(self.obj, other.obj) > 0
+
+        def __eq__(self, other):
+            return mycmp(self.obj, other.obj) == 0
+
+        def __le__(self, other):
+            return mycmp(self.obj, other.obj) <= 0
+
+        def __ge__(self, other):
+            return mycmp(self.obj, other.obj) >= 0
+
+        def __ne__(self, other):
+            return mycmp(self.obj, other.obj) != 0
+
+    return K
+
+
 def get_configs(conf_file, section):
     """Obtains the configs from a file.
     Config file format: INI
@@ -248,8 +280,16 @@ def kthreshing(purge=None, headers=None, keep=1):
             "autoremoval".format(len(kernel_versions))
         )
         logging.info("Pre-sorting: {0}".format(kernel_versions))
-        # Sadly this is broken in python3, https://bugs.python.org/issue14894
-        sorted_kernel_list = sorted(kernel_versions, key=LooseVersion)
+        try:
+            # Sadly this is broken in python3, https://bugs.python.org/issue14894
+            sorted_kernel_list = sorted(kernel_versions, key=LooseVersion)
+        except TypeError:
+            # Using apt_pkg.version_compare
+            # https://github.com/rackerlabs/kthresher/pull/61
+            sorted_kernel_list = sorted(
+                kernel_versions, key=cmp_to_key(apt.apt_pkg.version_compare)
+            )
+
         logging.info("Post-sorting: {0}".format(sorted_kernel_list))
         if keep >= len(kernel_versions):
             logging.error(
