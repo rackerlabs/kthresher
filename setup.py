@@ -15,39 +15,41 @@
 
 import setuptools
 
+
 def get_version():
-    with open('kthresher.py') as f:
+    with open("kthresher.py") as f:
         for line in f:
-            if line.startswith('__version__'):
-                return eval(line.split('=')[-1])
+            if line.startswith("__version__"):
+                return eval(line.split("=")[-1])
+
 
 setuptools.setup(
-    name='kthresher',
+    name="kthresher",
     version=get_version(),
-    description=('Purge Unused Kernels.'),
-    long_description=('Tool to remove kernel image packages marked as '
-                      'candidates for autoremoval.'),
-    url='https://github.com/rackerlabs/kthresher',
-    author='Tony Garcia',
-    author_email='tony.garcia@rackspace.com',
-    license='Apache License, Version 2.0',
-    entry_points={
-        'console_scripts': [
-            'kthresher=kthresher:main'
-        ]
-    },
-    py_modules=['kthresher'],
-    download_url='https://github.com/rackerlabs/kthresher/tarball/{0}'
-                 .format(get_version()),
+    description=("Purge Unused Kernels."),
+    long_description=(
+        "Tool to remove kernel image packages marked as candidates for autoremoval."
+    ),
+    url="https://github.com/rackerlabs/kthresher",
+    author="Tony Garcia",
+    author_email="tony.garcia@rackspace.com",
+    license="Apache License, Version 2.0",
+    entry_points={"console_scripts": ["kthresher=kthresher:main"]},
+    py_modules=["kthresher"],
+    download_url="https://github.com/rackerlabs/kthresher/tarball/{0}".format(
+        get_version()
+    ),
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Programming Language :: Python',
-        'Environment :: Console',
-        'Operating System :: POSIX :: Linux',
-        'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python :: 2.7',
+        "Development Status :: 5 - Production/Stable",
+        "Programming Language :: Python",
+        "Environment :: Console",
+        "Operating System :: POSIX :: Linux",
+        "License :: OSI Approved :: Apache Software License",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
     ],
-    data_files=[('/etc', ['kthresher.conf']),
-                ('/usr/share/man/man8', ['kthresher.8'])
-    ]
+    data_files=[("/etc", ["kthresher.conf"]), ("/usr/share/man/man8", ["kthresher.8"])],
 )
