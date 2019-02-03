@@ -354,7 +354,7 @@ def main():
         "--dry-run",
         action="store_true",
         help="List unused kernel images available to purge"
-        "(dry run). Is always verbose.",
+        " (dry run). Is always verbose.",
     )
     parser.add_argument(
         "-H",
@@ -379,7 +379,8 @@ def main():
         "-s",
         "--show-autoremoval",
         action="store_true",
-        help="Show kernel packages available for autoremoval.",
+        help="Show kernel packages available for autoremoval. This is the "
+        "default action",
     )
     parser.add_argument("-v", "--verbose", action="store_true", help="Be verbose.")
     parser.add_argument(
@@ -426,6 +427,7 @@ def main():
         options["verbose"] = args.verbose
     logging.info("Options: {0}".format(options))
     # Show auto-removable, this is only available via explicit argument
+    # Overrides actions defined in the configuration file(s).
     if args.show_autoremoval:
         logging.getLogger().setLevel(logging.INFO)
         show_autoremovable_pkgs()
@@ -440,9 +442,11 @@ def main():
     if not sys.stdout.isatty():
         sys.exit(0)
     else:
-        logging.error("No argument used.")
-        parser.print_help()
-        sys.exit(1)
+        # Show auto-remove is also a default option if no other action is
+        # defined.
+        logging.getLogger().setLevel(logging.INFO)
+        show_autoremovable_pkgs()
+        sys.exit(0)
 
 
 if __name__ == "__main__":
