@@ -367,7 +367,7 @@ def main():
         "--keep",
         nargs="?",
         type=int,
-        const=0,
+        const=1,
         metavar="N",
         choices=range(0, 10),
         help="Number of kernels to keep, default 1.",
