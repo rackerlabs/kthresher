@@ -38,6 +38,7 @@ import logging
 import argparse
 from glob import iglob
 from platform import uname
+from logging.handlers import SysLogHandler
 from distutils.version import LooseVersion
 
 try:
@@ -74,6 +75,11 @@ except ImportError:
 
 
 __version__ = "1.3.1"
+
+
+# Loggers
+logger = logging.getLogger(__name__)
+syslogger = logging.getLogger('kthresher')
 
 
 def cmp_to_key(mycmp):
@@ -130,65 +136,75 @@ def get_configs(conf_file, section):
     }
     configs = {}
     def_conf = Parser()
-    logging.info("Attempting to read {0}.".format(conf_file))
+    logger.info("Attempting to read {0}.".format(conf_file))
     try:
         def_conf.read(conf_file)
     except configparser.ParsingError:
-        logging.error("Error, File contains parsing errors: {0}".format(conf_file))
+        logger.error("Config file contains errors: {0}".format(conf_file))
         sys.exit(1)
     if not def_conf.read(conf_file):
-        logging.info(
+        logger.info(
             "Config file {0} is empty or does not exist, ignoring.".format(conf_file)
         )
         return configs
     if not def_conf.has_section(section):
-        logging.info("Unable to find section [{0}].".format(section))
+        logger.info("Unable to find section [{0}].".format(section))
         return configs
     if len(def_conf.options(section)) < 1:
-        logging.info("No options found in section [{0}].".format(section))
+        logger.info("No options found in section [{0}].".format(section))
         return configs
-    logging.info("Options found: {0}.".format(def_conf.options(section)))
+    logger.info("Options found: {0}.".format(def_conf.options(section)))
     # Validation of the options found
     for option in def_conf.options(section):
         if option not in valid_configs.keys():
-            logging.info('Invalid setting "{0}", ignoring'.format(option))
+            logger.info('Invalid setting "{0}", ignoring'.format(option))
         else:
-            logging.info('Valid setting found "{0}"'.format(option))
+            logger.info('Valid setting found "{0}"'.format(option))
             if valid_configs[option] == "int":
                 try:
                     configs[option] = def_conf.getint(section, option)
                 except configparser.NoOptionError:
-                    logging.error(
-                        'Error, unable to get value from "{0}".'.format(option)
+                    logger.error(
+                        'Unable to get value from "{0}".'.format(option)
+                    )
+                    sys.exit(1)
+                except ValueError:
+                    logger.error(
+                        'Invalid "{0}" value, an integer is required.'.format(option)
                     )
                     sys.exit(1)
                 if option == "keep":
                     if configs[option] > 9:
-                        logging.error('Error, "keep" should be between 0-9.')
+                        logger.error('keep value should be between 0-9.')
                         sys.exit(1)
             elif valid_configs[option] == "boolean":
                 try:
                     configs[option] = def_conf.getboolean(section, option)
                 except configparser.NoOptionError:
-                    logging.error(
-                        'Error, unable to get value from "{0}".'.format(option)
+                    logger.error(
+                        'Unable to get value from "{0}".'.format(option)
+                    )
+                    sys.exit(1)
+                except ValueError:
+                    logger.error(
+                        'Invalid "{0}" value, a boolean is required.'.format(option)
                     )
                     sys.exit(1)
             elif valid_configs[option] == "str":
                 try:
                     configs[option] = def_conf.get(section, option)
                 except configparser.NoOptionError:
-                    logging.error(
-                        'Error, unable to get value from "{0}".'.format(option)
+                    logger.error(
+                        'Unable to get value from "{0}".'.format(option)
                     )
-            logging.info("\t{0} = {1}".format(option, configs[option]))
+            logger.info("\t{0} = {1}".format(option, configs[option]))
     if "include" in configs.keys():
         # Obtain the configs on each nested config file.
         for nested_file in sorted(iglob(configs["include"])):
             # Aborting if importing the same config file.
             # Won't prevent indirect loops.
             if nested_file == conf_file:
-                logging.error("Error, looping config files, aborting...")
+                logger.error("Looping config files, aborting...")
                 sys.exit(1)
             nested_configs = get_configs(nested_file, section)
             # Override any option coming from the nested configs.
@@ -205,7 +221,7 @@ def show_autoremovable_pkgs():
     try:
         apt_cache = apt.Cache()
     except SystemError:
-        logging.error("Unable to obtain the cache!")
+        logger.error("Unable to obtain the cache!")
         sys.exit(1)
     for pkg_name in apt_cache.keys():
         pkg = apt_cache[pkg_name]
@@ -216,20 +232,26 @@ def show_autoremovable_pkgs():
             if ver_max_len < len(pkg.installed.version):
                 ver_max_len = len(pkg.installed.version)
     if packages:
-        logging.info("List of kernel packages available for autoremoval:")
-        logging.info(
+        logger.info("List of kernel packages available for autoremoval:")
+        logger.info(
             "{0:>{width}} {1:<{width}}".format(
                 "Version", "Package", width=ver_max_len + 2
             )
         )
         for package in sorted(packages.keys()):
-            logging.info(
+            logger.info(
                 "{0:>{width}} {1:<{width}}".format(
                     packages[package], package, width=ver_max_len + 2
                 )
             )
+        syslogger.info(
+            "kernel packages available for autoremoval: {0}".format(
+                sorted(packages.keys())
+            )
+        )
     else:
-        logging.info("No kernel packages available for autoremoval.")
+        logger.info("No kernel packages available for autoremoval.")
+        syslogger.info("No kernel packages available for autoremoval.")
 
 
 def kthreshing(purge=None, headers=None, keep=1):
@@ -245,11 +267,11 @@ def kthreshing(purge=None, headers=None, keep=1):
     try:
         apt_cache = apt.Cache()
     except SystemError:
-        logging.error("Unable to obtain the cache!")
+        logger.error("Unable to obtain the cache!")
         sys.exit(1)
     current_kernel_ver = uname()[2]
     kernel_pkg = apt_cache["linux-image-%s" % current_kernel_ver]
-    logging.info(
+    logger.info(
         "Running kernel is {0} v[{1}]".format(
             kernel_pkg.name, kernel_pkg.installed.version
         )
@@ -273,13 +295,13 @@ def kthreshing(purge=None, headers=None, keep=1):
                 else:
                     kernels[pkg.installed.version] = [pkg.name]
     if kernels:
-        logging.info("Attempting to keep {0} kernel package(s)".format(keep))
+        logger.info("Attempting to keep {0} kernel package(s)".format(keep))
         kernel_versions = list(kernels.copy().keys())
-        logging.info(
+        logger.info(
             "Found {0} kernel image(s) installed and available for "
             "autoremoval".format(len(kernel_versions))
         )
-        logging.info("Pre-sorting: {0}".format(kernel_versions))
+        logger.info("Pre-sorting: {0}".format(kernel_versions))
         try:
             # Sadly this is broken in python3, https://bugs.python.org/issue14894
             sorted_kernel_list = sorted(kernel_versions, key=LooseVersion)
@@ -290,24 +312,30 @@ def kthreshing(purge=None, headers=None, keep=1):
                 kernel_versions, key=cmp_to_key(apt.apt_pkg.version_compare)
             )
 
-        logging.info("Post-sorting: {0}".format(sorted_kernel_list))
+        logger.info("Post-sorting: {0}".format(sorted_kernel_list))
         if keep >= len(kernel_versions):
-            logging.error(
+            logger.info(
                 "Nothing to do, attempting to keep {0} out of {1} "
                 "kernel images.".format(keep, len(kernel_versions))
             )
-            sys.exit(1)
+            syslogger.info(
+                "Nothing to do, attempting to keep {0} out of {1} "
+                "kernel images.".format(keep, len(kernel_versions))
+            )
+            sys.exit(0)
         else:
+            purged_pkgs = []
             for index in range(0, len(sorted_kernel_list) - keep):
                 kernel_version = sorted_kernel_list[index]
-                logging.info(
+                logger.info(
                     "\tPurging packages from version: {0}".format(kernel_version)
                 )
                 for pkg_name in kernels[kernel_version]:
-                    logging.info("\t\tPurging: {0}".format(pkg_name))
+                    logger.info("\t\tPurging: {0}".format(pkg_name))
                     if purge:
                         pkg = apt_cache[pkg_name]
                         pkg.mark_delete(purge=True)
+                        purged_pkgs.append(pkg_name)
             if purge:
                 try:
                     apt_cache.commit(
@@ -315,13 +343,18 @@ def kthreshing(purge=None, headers=None, keep=1):
                         install_progress=apt.progress.base.InstallProgress(),
                     )
                 except apt.cache.LockFailedException as lfe:
-                    logging.error("{}, are you root?".format(lfe))
+                    logger.error("{}, are you root?".format(lfe))
                     sys.exit(1)
                 except SystemError:
-                    logging.error("Unable to commit the changes")
+                    logger.error("Unable to commit the changes")
                     sys.exit(1)
+                syslogger.info(
+                    "kernel packages purged: {} - {}".format(
+                        len(purged_pkgs), purged_pkgs
+                    )
+                )
     else:
-        logging.info("No packages available for autoremoval.")
+        logger.info("No packages available for autoremoval.")
 
 
 def main():
@@ -392,12 +425,26 @@ def main():
     )
     args = parser.parse_args()
 
-    # Logging
+    # Default logger
+    logger.setLevel(logging.ERROR)
+
+    # Configure console handler
+    ch = logging.StreamHandler()
+    cf = logging.Formatter("%(levelname)s: %(message)s")
+    ch.setFormatter(cf)
+    logger.addHandler(ch)
+
+    # Console logging override
     if args.verbose or args.dry_run:
-        log_level = logging.INFO
-    else:
-        log_level = logging.ERROR
-    logging.basicConfig(format="%(levelname)s: %(message)s", level=log_level)
+        logger.setLevel(logging.INFO)
+
+    # Configure syslog handler
+    sh = SysLogHandler("/dev/log")
+    sf = logging.Formatter("%(name)s[%(process)d]: %(message)s")
+    sh.setFormatter(sf)
+    syslogger.setLevel(logging.INFO)
+    syslogger.addHandler(sh)
+
     # Read config files
     if args.config:
         conf_options = get_configs(args.config, defaults["config"]["section"])
@@ -413,7 +460,7 @@ def main():
         options.update(conf_options)
     # Override the verbosity if set through configuration
     if options["verbose"]:
-        logging.getLogger().setLevel(logging.INFO)
+        logger.setLevel(logging.INFO)
     # Now overriding the result options with cli arguments
     if args.dry_run:
         options["dry_run"] = args.dry_run
@@ -425,15 +472,15 @@ def main():
         options["purge"] = args.purge
     if args.verbose:
         options["verbose"] = args.verbose
-    logging.info("Options: {0}".format(options))
+    logger.info("Options: {0}".format(options))
     # Show auto-removable, this is only available via explicit argument
     # Overrides actions defined in the configuration file(s).
     if args.show_autoremoval:
-        logging.getLogger().setLevel(logging.INFO)
+        logger.setLevel(logging.INFO)
         show_autoremovable_pkgs()
         sys.exit(0)
     if options["dry_run"]:
-        logging.info("----- DRY RUN -----")
+        logger.info("----- DRY RUN -----")
         kthreshing(purge=False, headers=options["headers"], keep=options["keep"])
         sys.exit(0)
     if options["purge"]:
@@ -444,7 +491,7 @@ def main():
     else:
         # Show auto-remove is also a default option if no other action is
         # defined.
-        logging.getLogger().setLevel(logging.INFO)
+        logger.setLevel(logging.INFO)
         show_autoremovable_pkgs()
         sys.exit(0)
 
