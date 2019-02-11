@@ -78,8 +78,7 @@ __version__ = "1.3.1"
 
 
 # Loggers
-logger = logging.getLogger(__name__)
-syslogger = logging.getLogger('kthresher')
+logger = logging.getLogger('kthresher')
 
 
 def cmp_to_key(mycmp):
@@ -244,14 +243,14 @@ def show_autoremovable_pkgs():
                     packages[package], package, width=ver_max_len + 2
                 )
             )
-        syslogger.info(
+        logger.log(
+            42,
             "kernel packages available for autoremoval: {0}".format(
                 sorted(packages.keys())
             )
         )
     else:
-        logger.info("No kernel packages available for autoremoval.")
-        syslogger.info("No kernel packages available for autoremoval.")
+        logger.log(42, "No kernel packages available for autoremoval.")
 
 
 def kthreshing(purge=None, headers=None, keep=1):
@@ -314,11 +313,8 @@ def kthreshing(purge=None, headers=None, keep=1):
 
         logger.info("Post-sorting: {0}".format(sorted_kernel_list))
         if keep >= len(kernel_versions):
-            logger.info(
-                "Nothing to do, attempting to keep {0} out of {1} "
-                "kernel images.".format(keep, len(kernel_versions))
-            )
-            syslogger.info(
+            logger.log(
+                42,
                 "Nothing to do, attempting to keep {0} out of {1} "
                 "kernel images.".format(keep, len(kernel_versions))
             )
@@ -348,7 +344,8 @@ def kthreshing(purge=None, headers=None, keep=1):
                 except SystemError:
                     logger.error("Unable to commit the changes")
                     sys.exit(1)
-                syslogger.info(
+                logger.log(
+                    42,
                     "kernel packages purged: {} - {}".format(
                         len(purged_pkgs), purged_pkgs
                     )
@@ -441,9 +438,11 @@ def main():
     # Configure syslog handler
     sh = SysLogHandler("/dev/log")
     sf = logging.Formatter("%(name)s[%(process)d]: %(message)s")
+    sh.setLevel(logging.ERROR)
     sh.setFormatter(sf)
-    syslogger.setLevel(logging.INFO)
-    syslogger.addHandler(sh)
+    logger.addHandler(sh)
+    # Create new logging level to be used on syslog
+    logging.addLevelName(42, 'INFO')
 
     # Read config files
     if args.config:
