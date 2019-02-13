@@ -219,7 +219,7 @@ def show_autoremovable_pkgs():
     for pkg_name in apt_cache.keys():
         pkg = apt_cache[pkg_name]
         if (pkg.is_installed and pkg.is_auto_removable) and re.match(
-            "^linux-(image|(\w+-)?headers)-.*$", pkg_name
+            r"^linux-(image|(\w+-)?headers)-.*$", pkg_name
         ):
             packages[pkg_name] = pkg.installed.version
             if ver_max_len < len(pkg.installed.version):
@@ -255,8 +255,8 @@ def kthreshing(purge=None, headers=None, keep=1):
     """
     kernels = {}
     ver_max_len = 0
-    kernel_image_regex = "^linux-image-.*$"
-    kernel_header_regex = "^linux-(\w+-)?headers-.*$"
+    kernel_image_regex = r"^linux-image-.*$"
+    kernel_header_regex = r"^linux-(\w+-)?headers-.*$"
     try:
         apt_cache = apt.Cache()
     except SystemError:
