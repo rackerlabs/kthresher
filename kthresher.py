@@ -78,7 +78,7 @@ __version__ = "1.3.1"
 
 
 # Loggers
-logger = logging.getLogger('kthresher')
+logger = logging.getLogger("kthresher")
 
 
 def cmp_to_key(mycmp):
@@ -163,9 +163,7 @@ def get_configs(conf_file, section):
                 try:
                     configs[option] = def_conf.getint(section, option)
                 except configparser.NoOptionError:
-                    logger.error(
-                        'Unable to get value from "{0}".'.format(option)
-                    )
+                    logger.error('Unable to get value from "{0}".'.format(option))
                     sys.exit(1)
                 except ValueError:
                     logger.error(
@@ -174,15 +172,13 @@ def get_configs(conf_file, section):
                     sys.exit(1)
                 if option == "keep":
                     if configs[option] > 9:
-                        logger.error('keep value should be between 0-9.')
+                        logger.error("keep value should be between 0-9.")
                         sys.exit(1)
             elif valid_configs[option] == "boolean":
                 try:
                     configs[option] = def_conf.getboolean(section, option)
                 except configparser.NoOptionError:
-                    logger.error(
-                        'Unable to get value from "{0}".'.format(option)
-                    )
+                    logger.error('Unable to get value from "{0}".'.format(option))
                     sys.exit(1)
                 except ValueError:
                     logger.error(
@@ -193,9 +189,7 @@ def get_configs(conf_file, section):
                 try:
                     configs[option] = def_conf.get(section, option)
                 except configparser.NoOptionError:
-                    logger.error(
-                        'Unable to get value from "{0}".'.format(option)
-                    )
+                    logger.error('Unable to get value from "{0}".'.format(option))
             logger.info("\t{0} = {1}".format(option, configs[option]))
     if "include" in configs.keys():
         # Obtain the configs on each nested config file.
@@ -247,7 +241,7 @@ def show_autoremovable_pkgs():
             42,
             "kernel packages available for autoremoval: {0}".format(
                 sorted(packages.keys())
-            )
+            ),
         )
     else:
         logger.log(42, "No kernel packages available for autoremoval.")
@@ -316,7 +310,7 @@ def kthreshing(purge=None, headers=None, keep=1):
             logger.log(
                 42,
                 "Nothing to do, attempting to keep {0} out of {1} "
-                "kernel images.".format(keep, len(kernel_versions))
+                "kernel images.".format(keep, len(kernel_versions)),
             )
             sys.exit(0)
         else:
@@ -348,7 +342,7 @@ def kthreshing(purge=None, headers=None, keep=1):
                     42,
                     "kernel packages purged: {} - {}".format(
                         len(purged_pkgs), purged_pkgs
-                    )
+                    ),
                 )
     else:
         logger.info("No packages available for autoremoval.")
@@ -442,7 +436,7 @@ def main():
     sh.setFormatter(sf)
     logger.addHandler(sh)
     # Create new logging level to be used on syslog
-    logging.addLevelName(42, 'INFO')
+    logging.addLevelName(42, "INFO")
 
     # Read config files
     if args.config:
