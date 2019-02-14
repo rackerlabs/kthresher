@@ -12,9 +12,9 @@ kthresher \- purge unused kernels
 is a utility to remove kernel packages that are marked as a candidate for autoremoval, such as those installed via unattended\-upgrades or meta packages. 
 .PP
 By default the running kernel, the latest kernel and manual installations are marked to 'Never Auto Remove'.
-.PP 
-.I "kthresher"
-will not attempt to remove those packages.
+.IR "kthresher " "then will not attempt to remove those packages."
+.PP
+When no option is passed to kthresher the list of available kernels for autoremoval will be printed.
 .SH "OPTIONS"
 .TP
 .B "\-h, \-\-help"
@@ -25,25 +25,25 @@ Config file, default is
 .I /etc/kthresher.conf
 .TP
 .B "\-d, \-\-dry\-run"
-List unused kernel images available to purge.
-This implies the 
-.B \-\-verbose 
-flag but performs no actions
+List what packages would be purged but do not perform the action, by default
+does not perform a dry-run.
 .TP
 .B "\-H, \-\-headers"
-Include the search for kernel headers
+Include the search for kernel headers, by default does not include headers.
 .TP
 .BI "\-k " "N" ", \-\-keep " "N"
-Number of kernels to keep, default:  1
+Number of autoremovable kernels to keep, default is 1.
 .TP
 .B "\-p, \-\-purge"
-Purge unused kernels
+Purge unused kernels, by default does not purge packages.
 .TP
 .B "\-s, \-\-show\-autoremoval"
-Show kernel packages available for autoremoval
+Show kernel packages available for autoremoval. When defined, overrides any
+other action coming from the configuration file(s). This is the default action when
+no other action is defined.
 .TP
 .B "\-v, \-\-verbose"
-Be verbose
+Be verbose, by default is not verbose.
 .TP
 .B "\-V, \-\-version"
 Print version

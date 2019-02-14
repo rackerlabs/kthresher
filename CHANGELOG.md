@@ -3,6 +3,24 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.4.1] - 2019-02-13
+### Added
+- Add system logs on purge, show and errors.
+- Python3 Support.
+- Add systemd timer units.
+
+### Changed
+- Documented default values.
+- Make show autoremoval action the default.
+- Use `version_compare` from `apt` when `LooseVersion` fails.
+
+### Fixed
+- Make `keep` truly default to 1.
+- Cron job should not fail if the binary does not exist.
+
+### Removed
+- Setuptools does not include `data_files` with man page nor default config anymore.
+
 ## [1.3.1] - 2018-04-23
 ### Added
 - Removed shell from bash completion.

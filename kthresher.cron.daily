@@ -1,3 +1,5 @@
 #!/bin/sh
 
-[ -x /usr/bin/kthresher ] && /usr/bin/kthresher &>/dev/null
+[ -x /usr/bin/kthresher ] || exit 0
+
+/usr/bin/kthresher &>/dev/null

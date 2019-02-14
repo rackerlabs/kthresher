@@ -3,6 +3,22 @@
 kthresher
 =========
 
+.. image:: https://img.shields.io/github/release/rackerlabs/kthresher.svg
+        :target: https://github.com/rackerlabs/kthresher/releases/latest
+        :alt: Github release
+.. image:: https://img.shields.io/travis/rackerlabs/kthresher/master.svg?logo=travis&label=master
+        :target: https://travis-ci.org/rackerlabs/kthresher
+        :alt: Build Master Status
+.. image:: https://img.shields.io/travis/rackerlabs/kthresher/master.svg?logo=travis&label=development
+        :target: https://travis-ci.org/rackerlabs/kthresher
+        :alt: Build Development Status
+.. image:: https://img.shields.io/github/license/rackerlabs/kthresher.svg
+        :target: https://raw.githubusercontent.com/rackerlabs/kthresher/master/LICENSE
+        :alt: License
+.. image:: https://img.shields.io/twitter/url/https/github.com/rackerlabs/kthresher.svg?style=social
+        :target: https://twitter.com/intent/tweet?text=Check%20this%20out:&url=https%3A%2F%2Fgithub.com%2Frackerlabs%2Fkthresher
+        :alt: Twitter
+
 Tool to remove unused kernels that were installed automatically in Debian/Ubuntu.
 
 This tool removes those kernel packages marked as candidate for autoremoval. Those packages are generally installed via Unattended upgrade or meta-packages.
@@ -374,11 +390,6 @@ The below code can be used to install up to a fixed amount of kernels and header
     if __name__ == "__main__":
         main()
 
-
-
-Known Issues
-------------
-Python3 support is currently broken due to a known disutils.LooseVersion `issue <https://bugs.python.org/issue14894>`__.
 
 
 Bugs
