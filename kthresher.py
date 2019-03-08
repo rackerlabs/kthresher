@@ -37,6 +37,7 @@ import sys
 import logging
 import argparse
 from glob import iglob
+from os import path
 from platform import uname
 from logging.handlers import SysLogHandler
 from distutils.version import LooseVersion
@@ -430,11 +431,13 @@ def main():
         logger.setLevel(logging.INFO)
 
     # Configure syslog handler
-    sh = SysLogHandler("/dev/log")
-    sf = logging.Formatter("%(name)s[%(process)d]: %(message)s")
-    sh.setLevel(logging.ERROR)
-    sh.setFormatter(sf)
-    logger.addHandler(sh)
+    if path.exists("/dev/log"):
+        sh = SysLogHandler("/dev/log")
+        sf = logging.Formatter("%(name)s[%(process)d]: %(message)s")
+        sh.setLevel(logging.ERROR)
+        sh.setFormatter(sf)
+        logger.addHandler(sh)
+
     # Create new logging level to be used on syslog
     logging.addLevelName(42, "INFO")
 
