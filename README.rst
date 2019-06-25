@@ -28,7 +28,11 @@ By default, on apt 1.0 and below, the booted kernel, the latest-installed kernel
 Ubuntu has multiple suggestions on how to remove kernels:
   https://help.ubuntu.com/community/RemoveOldKernels
 
-A good recommendation is using unattendend-upgrades(`debian <https://wiki.debian.org/UnattendedUpgrades>`__, `ubuntu <https://help.ubuntu.com/community/AutomaticSecurityUpdates>`__) as it has an option to remove unused dependencies, but that applies to all packages not just kernels.
+A great recommendation is to make use of unattended-upgrades `u-u` (`debian <https://wiki.debian.org/UnattendedUpgrades>`__, `ubuntu <https://help.ubuntu.com/community/AutomaticSecurityUpdates>`__). Since version **1.0** (`debian <https://packages.debian.org/search?keywords=unattended-upgrades>`__, `ubuntu <https://packages.ubuntu.com/search?keywords=unattended-upgrades>`__) *u-u* is capable of removing unused kernel packages (*Remove-Unused-Kernel-Packages*).
+Some distributions may not make reference or may comment out that setting in its configuration, but unless it is explicitly disabled, *u-u* will attempt to remove unused kernels. `More info here <https://github.com/rackerlabs/kthresher/issues/79>`__.
+
+For scenarios where *u-u* is not available or older than **1.0**, `kthresher` is still a good option.
+
 
 *thresher - A device that first separates the head of a stalk of grain from the straw, and then further separates the kernel from the rest of the head.*
 
