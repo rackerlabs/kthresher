@@ -272,8 +272,9 @@ def kthreshing(purge=None, headers=None, keep=1):
     )
     for pkg_name in apt_cache.keys():
         pkg = apt_cache[pkg_name]
+        section = pkg.candidate.section or ''
         if (pkg.is_installed and pkg.is_auto_removable) and (
-            "kernel" in pkg.section and re.match(kernel_image_regex, pkg_name)
+            "kernel" in section and re.match(kernel_image_regex, pkg_name)
         ):
             if ver_max_len < len(pkg.installed.version):
                 ver_max_len = len(pkg.installed.version)
