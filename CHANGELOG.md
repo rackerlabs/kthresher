@@ -3,7 +3,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## [1.4.1] - 2019-02-13
+## [1.4.1] - 2019-06-26
+### Added
+- Only create a syslog handler if /dev/log exists.
+- Reference of unattended-updates capability to remove unused kernels.
+
+### Changed
+- Use package section from `Version` instead of `Package`.
+
+## [1.4.0] - 2019-02-13
 ### Added
 - Add system logs on purge, show and errors.
 - Python3 Support.
@@ -153,5 +161,6 @@ All notable changes to this project will be documented in this file.
 - [delag](https://github.com/delag)
 - [disengage00](https://github.com/disengage00)
 - [jamrok](https://github.com/jamrok)
+- [jkirk](https://github.com/jkirk)
 - [Jose R. Gonzalez](https://github.com/Komish)
 - [Tony G.](https://github.com/tonyskapunk)
