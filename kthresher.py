@@ -25,8 +25,8 @@ Auto Remove.
 Ubuntu has multiple suggestions on how to remove kernels:
   https://help.ubuntu.com/community/RemoveOldKernels
 
-A good recommendation is using unattendend-upgrades as it has an option to
-remove unused dependencies, but that applies to all packages not just kernels.
+A great recommendation is to make use of unattended-upgrades (u-u). Since
+version 1.0 u-u is capable of removing unused kernel packages.
 
 thresher - A device that first separates the head of a stalk of grain from
 the straw, and then further separates the kernel from the rest of the head.
