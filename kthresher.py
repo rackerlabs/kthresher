@@ -25,8 +25,8 @@ Auto Remove.
 Ubuntu has multiple suggestions on how to remove kernels:
   https://help.ubuntu.com/community/RemoveOldKernels
 
-A good recommendation is using unattendend-upgrades as it has an option to
-remove unused dependencies, but that applies to all packages not just kernels.
+A great recommendation is to make use of unattended-upgrades (u-u). Since
+version 1.0 u-u is capable of removing unused kernel packages.
 
 thresher - A device that first separates the head of a stalk of grain from
 the straw, and then further separates the kernel from the rest of the head.
@@ -37,6 +37,7 @@ import sys
 import logging
 import argparse
 from glob import iglob
+from os import path
 from platform import uname
 from logging.handlers import SysLogHandler
 from distutils.version import LooseVersion
@@ -74,7 +75,7 @@ except ImportError:
     sys.exit(1)
 
 
-__version__ = "1.4.0"
+__version__ = "1.4.1"
 
 
 # Loggers
@@ -271,8 +272,9 @@ def kthreshing(purge=None, headers=None, keep=1):
     )
     for pkg_name in apt_cache.keys():
         pkg = apt_cache[pkg_name]
+        section = pkg.candidate.section or ''
         if (pkg.is_installed and pkg.is_auto_removable) and (
-            "kernel" in pkg.section and re.match(kernel_image_regex, pkg_name)
+            "kernel" in section and re.match(kernel_image_regex, pkg_name)
         ):
             if ver_max_len < len(pkg.installed.version):
                 ver_max_len = len(pkg.installed.version)
@@ -430,11 +432,13 @@ def main():
         logger.setLevel(logging.INFO)
 
     # Configure syslog handler
-    sh = SysLogHandler("/dev/log")
-    sf = logging.Formatter("%(name)s[%(process)d]: %(message)s")
-    sh.setLevel(logging.ERROR)
-    sh.setFormatter(sf)
-    logger.addHandler(sh)
+    if path.exists("/dev/log"):
+        sh = SysLogHandler("/dev/log")
+        sf = logging.Formatter("%(name)s[%(process)d]: %(message)s")
+        sh.setLevel(logging.ERROR)
+        sh.setFormatter(sf)
+        logger.addHandler(sh)
+
     # Create new logging level to be used on syslog
     logging.addLevelName(42, "INFO")
 

@@ -1,27 +1,66 @@
-language: python
+---
+language: generic
 dist: xenial
+sudo: enabled
 branches:
   only:
   - master
   - development
 
-env:
-  global:
-  - VIRTUALENV_SYSTEM_SITE_PACKAGES=false
-
 matrix:
   include:
-  - python: 2.7
-    env: TOXENV=py27
-  - python: 3.6
-    env: TOXENV=py36
-  - python: 3.7
-    env: TOXENV=py37
-  - python: 3.7
-    env: TOXENV=pycodestyle
+    - name: "Ubuntu 14.04 (trusty)"
+      env:
+        - DISTRO='ubuntu:14.04'
+    - name: "Ubuntu 16.04 (xenial)"
+      env:
+        - DISTRO='ubuntu:16.04'
+    - name: "Ubuntu 18.04 (bionic)"
+      env:
+        - DISTRO='ubuntu:18.04'
+    - name: "Debian 8 (jessie)"
+      env:
+        - DISTRO='debian:8'
+    - name: "Debian 9 (stretch)"
+      env:
+        - DISTRO='debian:9'
+    - name: "Debian (buster)"
+      env:
+        - DISTRO='debian:buster'
 
 before_install:
-  - pip install tox
+  - |
+    docker run \
+      --detach \
+      --rm \
+      --tty \
+      --privileged \
+      --network=host \
+      --name kthresher_on_${DISTRO/:/_} \
+      --mount type=bind,src="$(pwd)",dst=/kthresher \
+      ${DISTRO}
+  - |
+    docker exec \
+    kthresher_on_${DISTRO/:/_} \
+      bash -c \
+       'apt-get update; \
+        apt-get install -yq --no-install-suggests --no-install-recommends \
+         python \
+         python3 \
+         python-apt \
+         python3-apt \
+         python-pip \
+         python3-pip \
+         python-setuptools \
+         python3-setuptools'
+  - |
+    docker exec \
+      kthresher_on_${DISTRO/:/_} \
+      bash -c 'pip install tox'
 
 script:
-  - tox
+  - >
+    docker exec \
+      kthresher_on_${DISTRO/:/_} \
+      bash -c 'cd /kthresher/; tox'
+...
