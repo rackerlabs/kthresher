@@ -25,7 +25,7 @@ This tool removes those kernel packages marked as candidate for autoremoval. Tho
 
 By default, on apt 1.0 and below, the booted kernel, the latest-installed kernel and the latest kernel are set to "NeverAutoRemove". Or, for apt 1.2 and above, the booted kernel, the latest-installed kernel, the latest kernel and the second-latest kernel are set to "NeverAutoRemove".
 
-Ubuntu has multiple suggestions on how to remove kernels:
+The official documentation has multiple suggestions on how to remove kernels:
   https://help.ubuntu.com/community/RemoveOldKernels
 
 A great recommendation is to make use of unattended-upgrades `u-u` (`debian <https://wiki.debian.org/UnattendedUpgrades>`__, `ubuntu <https://help.ubuntu.com/community/AutomaticSecurityUpdates>`__). Since version **1.0** (`debian <https://packages.debian.org/search?keywords=unattended-upgrades>`__, `ubuntu <https://packages.ubuntu.com/search?keywords=unattended-upgrades>`__) *u-u* removes unused kernel packages by default (*Remove-Unused-Kernel-Packages*).
