@@ -272,7 +272,10 @@ def kthreshing(purge=None, headers=None, keep=1):
     )
     for pkg_name in apt_cache.keys():
         pkg = apt_cache[pkg_name]
-        section = pkg.candidate.section or ''
+        try:
+            section = pkg.candidate.section
+        except:
+            section = ''
         if (pkg.is_installed and pkg.is_auto_removable) and (
             "kernel" in section and re.match(kernel_image_regex, pkg_name)
         ):
