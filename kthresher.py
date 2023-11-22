@@ -36,11 +36,12 @@ import re
 import sys
 import logging
 import argparse
+from packaging.version import Version
 from glob import iglob
 from os import path
 from platform import uname
 from logging.handlers import SysLogHandler
-from distutils.version import LooseVersion
+
 
 try:
     import configparser
@@ -299,7 +300,7 @@ def kthreshing(purge=None, headers=None, keep=1):
         logger.info("Pre-sorting: {0}".format(kernel_versions))
         try:
             # Sadly this is broken in python3, https://bugs.python.org/issue14894
-            sorted_kernel_list = sorted(kernel_versions, key=LooseVersion)
+            sorted_kernel_list = sorted(kernel_versions, key=Version)
         except TypeError:
             # Using apt_pkg.version_compare
             # https://github.com/rackerlabs/kthresher/pull/61
